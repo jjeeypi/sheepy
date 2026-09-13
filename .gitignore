@@ -37,6 +37,7 @@ desktop.ini
 
 # PHP built-in server / temp files
 *.pid
+/tmp/
 
 # Composer (in case I add it later)
 /vendor/

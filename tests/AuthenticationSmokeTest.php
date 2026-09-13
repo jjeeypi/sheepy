@@ -98,6 +98,11 @@ $check(
     && str_contains($html, 'aria-labelledby="auth-title"'),
     'The accessible login interactions are missing.'
 );
+$check(
+    str_contains($html, 'assets/images/logo/logo.svg')
+    && str_contains($html, 'class="auth-brand-logo"'),
+    'The shared Sheepy logo is missing from the authentication view.'
+);
 
 $registrationHtml = $view->render('auth/register', [
     'errors' => ['email' => 'Enter a valid email address.'],

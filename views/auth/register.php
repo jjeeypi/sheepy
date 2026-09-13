@@ -75,7 +75,6 @@
                                 spellcheck="false"
                                 <?= isset($errors['username']) ? 'aria-invalid="true" aria-describedby="username-error"' : '' ?>
                                 required
-                                autofocus
                             >
                         </div>
                         <?php if (isset($errors['username'])): ?>

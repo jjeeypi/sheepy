@@ -141,12 +141,13 @@ final class AuthController extends BaseController
         ], $status);
     }
 
-    /** @return array{authCssUrl: string, authJsUrl: string} */
+    /** @return array{authCssUrl: string, authJsUrl: string, logoUrl: string} */
     private function assetUrls(Request $request): array
     {
         return [
             'authCssUrl' => $request->url('/assets/css/auth.css'),
             'authJsUrl' => $request->url('/assets/js/auth.js'),
+            'logoUrl' => $request->url('/assets/images/logo/logo.svg'),
         ];
     }
 }

@@ -82,7 +82,6 @@
                                 spellcheck="false"
                                 <?= isset($errors['identifier']) ? 'aria-invalid="true" aria-describedby="identifier-error"' : '' ?>
                                 required
-                                autofocus
                             >
                         </div>
                         <?php if (isset($errors['identifier'])): ?>
