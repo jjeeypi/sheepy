@@ -76,6 +76,20 @@ final class ProductController extends BaseController
             return $this->notFoundPage();
         }
 
+        $navigation = $this->catalog->navigation();
+        $activeDepartment = $result['breadcrumb'][0] ?? null;
+        $categoryNavigation = [];
+
+        foreach ($navigation as $group) {
+            if (
+                $activeDepartment !== null
+                && $group['department']->id === $activeDepartment->id
+            ) {
+                $categoryNavigation = $group['children'];
+                break;
+            }
+        }
+
         $browsePath = $categorySlug === null
             ? '/products'
             : '/categories/' . $categorySlug;
@@ -99,7 +113,10 @@ final class ProductController extends BaseController
 
         return $this->render('products/index', [
             ...$result,
-            'navigation' => $this->catalog->navigation(),
+            'navigation' => $navigation,
+            'activeNavigation' => $activeDepartment?->slug ?? '',
+            'activeDepartment' => $activeDepartment,
+            'categoryNavigation' => $categoryNavigation,
             'user' => $user,
             'csrfToken' => $this->csrf->token(),
             'logoutUrl' => $request->url('/logout'),

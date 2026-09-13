@@ -83,13 +83,13 @@ $html = $view->render('home/index', [
 ]);
 
 $check(
-    str_contains($html, '/assets/css/home.css')
-        && str_contains($html, '/assets/js/home.js'),
+    str_contains($html, '/assets/css/storefront.css')
+        && str_contains($html, '/assets/js/storefront.js'),
     'The dedicated home interface assets are not loaded.'
 );
 $check(
-    is_file($root . '/public/assets/css/home.css')
-        && is_file($root . '/public/assets/js/home.js'),
+    is_file($root . '/public/assets/css/storefront.css')
+        && is_file($root . '/public/assets/js/storefront.js'),
     'A dedicated home interface asset is missing.'
 );
 $check(
@@ -130,13 +130,13 @@ $check(
     'The home page has neither product actions nor its empty state.'
 );
 $check(
-    str_contains((string) file_get_contents($root . '/public/assets/css/home.css'), '@media (max-width: 40rem)')
-        && str_contains((string) file_get_contents($root . '/public/assets/css/home.css'), 'prefers-reduced-motion')
-        && str_contains((string) file_get_contents($root . '/public/assets/css/home.css'), '--rust: #a9663d'),
+    str_contains((string) file_get_contents($root . '/public/assets/css/storefront.css'), '@media (max-width: 40rem)')
+        && str_contains((string) file_get_contents($root . '/public/assets/css/storefront.css'), 'prefers-reduced-motion')
+        && str_contains((string) file_get_contents($root . '/public/assets/css/storefront.css'), '--rust: #a9663d'),
     'Mobile or reduced-motion home styles are missing.'
 );
 $check(
-    str_contains((string) file_get_contents($root . '/public/assets/js/home.js'), "event.key === 'Escape'")
+    str_contains((string) file_get_contents($root . '/public/assets/js/storefront.js'), "event.key === 'Escape'")
         && str_contains($html, 'class="mobile-tabbar"'),
     'Keyboard dismissal or mobile shortcuts are missing from the home interactions.'
 );

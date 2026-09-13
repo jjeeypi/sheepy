@@ -219,8 +219,9 @@ C:\xampp\php\php.exe .\tests\ProductManagementSmokeTest.php
 Phase 4 turns the authenticated customer Home page into a functional, responsive storefront based on the supplied desktop, laptop, and tablet mockups:
 
 - Men, Women, Kids, and Accessories department navigation
-- Editorial hero, department cards, responsive product grid, shopping-benefit strip, and compact storefront footer
-- Dedicated home-page CSS and JavaScript with accessible mobile navigation, expandable search, keyboard controls, and reduced-motion support
+- Editorial hero, image-based category cards, responsive product grids, shopping-benefit strip, and compact storefront footer
+- Shared storefront CSS, JavaScript, header, footer, and product-card components with accessible mobile navigation, expandable search, keyboard controls, and reduced-motion support
+- Responsive Men catalogue with active department navigation, horizontally scrollable product-type filters, scoped search, empty states, and pagination
 - Product-type browsing beneath each department
 - New-arrival products on Home and a paginated all-products page
 - Product search across names, descriptions, and SKUs
@@ -235,6 +236,7 @@ Run the Phase 4 database-backed smoke test with:
 ```powershell
 C:\xampp\php\php.exe .\tests\CatalogBrowsingSmokeTest.php
 C:\xampp\php\php.exe .\tests\HomeInterfaceSmokeTest.php
+C:\xampp\php\php.exe .\tests\CatalogInterfaceSmokeTest.php
 ```
 
 ## Phase 5 Cart System

@@ -8,108 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= $escape($basePath) ?>/assets/css/home.css">
+    <link rel="stylesheet" href="<?= $escape($basePath) ?>/assets/css/storefront.css">
     <link rel="stylesheet" href="<?= $escape($basePath) ?>/assets/css/cart.css">
-    <script src="<?= $escape($basePath) ?>/assets/js/home.js" defer></script>
+    <script src="<?= $escape($basePath) ?>/assets/js/storefront.js" defer></script>
     <script src="<?= $escape($basePath) ?>/assets/js/cart.js" defer></script>
 </head>
-<body class="home-page">
+<body class="storefront-page home-page">
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
-    <header class="site-header" data-site-header>
-        <div class="header-shell">
-            <button
-                class="header-icon-button menu-toggle"
-                type="button"
-                aria-expanded="false"
-                aria-controls="primary-navigation"
-                data-menu-toggle
-            >
-                <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="M4 7h16M4 12h16M4 17h16"></path>
-                </svg>
-                <span class="sr-only">Open navigation</span>
-            </button>
-
-            <a class="site-logo" href="<?= $escape($homeUrl) ?>" aria-label="Sheepy home">
-                <img src="<?= $escape($basePath) ?>/assets/images/logo/logo.svg" alt="Sheepy" width="116" height="68">
-            </a>
-
-            <nav class="primary-navigation" id="primary-navigation" aria-label="Store navigation" data-navigation>
-                <a class="is-active" href="<?= $escape($homeUrl) ?>" aria-current="page">Home</a>
-                <?php foreach ($navigation as $group): ?>
-                    <a href="<?= $escape($categoriesUrl . '/' . $group['department']->slug) ?>">
-                        <?= $escape($group['department']->name) ?>
-                    </a>
-                <?php endforeach; ?>
-                <div class="mobile-account-links" data-mobile-account-links>
-                    <a href="<?= $escape($ordersUrl) ?>">Order history</a>
-                    <form method="post" action="<?= $escape($logoutUrl) ?>">
-                        <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
-                        <button type="submit">Log out</button>
-                    </form>
-                </div>
-            </nav>
-
-            <div class="header-actions">
-                <button
-                    class="header-icon-button search-toggle"
-                    type="button"
-                    aria-expanded="false"
-                    aria-controls="header-search"
-                    data-search-toggle
-                >
-                    <svg aria-hidden="true" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="6.5"></circle>
-                        <path d="m16 16 4 4"></path>
-                    </svg>
-                    <span class="sr-only">Search products</span>
-                </button>
-
-                <?php require dirname(__DIR__) . '/products/_cart.php'; ?>
-
-                <details class="account-menu">
-                    <summary class="header-icon-button">
-                        <svg aria-hidden="true" viewBox="0 0 24 24">
-                            <circle cx="12" cy="8" r="3.5"></circle>
-                            <path d="M5 20c.6-4 3-6 7-6s6.4 2 7 6"></path>
-                        </svg>
-                        <span class="sr-only">Account menu</span>
-                    </summary>
-                    <div class="account-popover">
-                        <?php if ($user instanceof \App\Models\User): ?>
-                            <p class="account-label">Signed in as</p>
-                            <strong><?= $escape($user->username) ?></strong>
-                        <?php endif; ?>
-                        <a href="<?= $escape($ordersUrl) ?>">Order history</a>
-                        <form method="post" action="<?= $escape($logoutUrl) ?>">
-                            <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
-                            <button type="submit">Log out</button>
-                        </form>
-                    </div>
-                </details>
-            </div>
-        </div>
-
-        <div class="header-search" id="header-search" data-search-panel hidden>
-            <form method="get" action="<?= $escape($productsUrl) ?>" role="search">
-                <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="6.5"></circle>
-                    <path d="m16 16 4 4"></path>
-                </svg>
-                <label class="sr-only" for="home-search">Search products</label>
-                <input
-                    id="home-search"
-                    name="q"
-                    type="search"
-                    maxlength="100"
-                    autocomplete="off"
-                    placeholder="Search products"
-                >
-                <button type="submit">Search</button>
-            </form>
-        </div>
-    </header>
+    <?php $activeNavigation = 'home'; ?>
+    <?php require dirname(__DIR__) . '/storefront/_header.php'; ?>
 
     <main id="main-content">
         <section class="hero section-shell" aria-labelledby="hero-title">
@@ -166,7 +74,7 @@
             <?php else: ?>
                 <div class="product-grid">
                     <?php foreach ($latestProducts as $product): ?>
-                        <?php require __DIR__ . '/_product_card.php'; ?>
+                        <?php require dirname(__DIR__) . '/products/_storefront_card.php'; ?>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
@@ -220,57 +128,6 @@
         </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="footer-shell section-shell">
-            <div class="footer-brand">
-                <img src="<?= $escape($basePath) ?>/assets/images/logo/logo.svg" alt="Sheepy" width="116" height="68">
-                <p>Considered basics, made to be worn on repeat.</p>
-            </div>
-            <nav aria-label="Footer shop links">
-                <strong>Shop</strong>
-                <a href="<?= $escape($productsUrl) ?>">All products</a>
-                <a href="#new-arrivals">New arrivals</a>
-            </nav>
-            <nav aria-label="Footer department links">
-                <strong>Departments</strong>
-                <?php foreach ($navigation as $group): ?>
-                    <a href="<?= $escape($categoriesUrl . '/' . $group['department']->slug) ?>">
-                        <?= $escape($group['department']->name) ?>
-                    </a>
-                <?php endforeach; ?>
-            </nav>
-            <nav aria-label="Footer account links">
-                <strong>Account</strong>
-                <a href="<?= $escape($ordersUrl) ?>">Order history</a>
-                <form method="post" action="<?= $escape($logoutUrl) ?>">
-                    <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
-                    <button type="submit">Log out</button>
-                </form>
-            </nav>
-        </div>
-        <div class="footer-bottom section-shell">
-            <span>&copy; <?= $escape(date('Y')) ?> Sheepy</span>
-            <a href="#main-content">Back to top</a>
-        </div>
-    </footer>
-
-    <nav class="mobile-tabbar" aria-label="Mobile shortcuts">
-        <a class="is-active" href="<?= $escape($homeUrl) ?>" aria-current="page">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m4 11 8-7 8 7v9h-6v-6h-4v6H4v-9Z"></path></svg>
-            <span>Home</span>
-        </a>
-        <button type="button" data-bottom-search>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4 4"></path></svg>
-            <span>Search</span>
-        </button>
-        <button type="button" data-bottom-cart>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 6H6"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>
-            <span>Bag</span>
-        </button>
-        <button type="button" data-bottom-account>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c.6-4 3-6 7-6s6.4 2 7 6"></path></svg>
-            <span>Account</span>
-        </button>
-    </nav>
+    <?php require dirname(__DIR__) . '/storefront/_footer.php'; ?>
 </body>
 </html>
