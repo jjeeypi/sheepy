@@ -1,1 +1,51 @@
 Project_Info/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs
+storage/logs/*.log
+*.log
+
+# Cache
+storage/cache/*
+!storage/cache/.gitkeep
+
+# Uploaded files (don't commit user-uploaded product images)
+public/uploads/products/*
+!public/uploads/products/.gitkeep
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# PHP built-in server / temp files
+*.pid
+
+# Composer (in case I add it later)
+/vendor/
+composer.lock
+
+# PHPUnit / testing artifacts
+.phpunit.result.cache
+/coverage/
+
+# Backup files
+*.bak
+*.orig
+
+# Database (if any case I use SQLite locally)
+*.sqlite
+*.sqlite3
+*.dba
