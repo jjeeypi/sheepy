@@ -6,6 +6,9 @@
     const navigation = document.querySelector('[data-navigation]');
     const searchToggle = document.querySelector('[data-search-toggle]');
     const searchPanel = document.querySelector('[data-search-panel]');
+    const bottomSearch = document.querySelector('[data-bottom-search]');
+    const bottomCart = document.querySelector('[data-bottom-cart]');
+    const bottomAccount = document.querySelector('[data-bottom-account]');
 
     if (!header) {
         return;
@@ -48,6 +51,23 @@
 
     searchToggle?.addEventListener('click', () => {
         setSearchOpen(searchToggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    bottomSearch?.addEventListener('click', () => {
+        setSearchOpen(true);
+        header.scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
+
+    bottomCart?.addEventListener('click', () => {
+        document.querySelector('[data-cart-open]')?.click();
+    });
+
+    bottomAccount?.addEventListener('click', () => {
+        setSearchOpen(false);
+        setMenuOpen(true);
+        window.setTimeout(() => {
+            navigation?.querySelector('[data-mobile-account-links] a')?.focus();
+        }, 260);
     });
 
     document.addEventListener('click', (event) => {

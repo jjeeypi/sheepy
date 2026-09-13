@@ -13,7 +13,6 @@
                 <span class="product-image-placeholder">Image coming soon</span>
             <?php endif; ?>
         </a>
-        <span class="product-badge">New</span>
         <button
             class="product-add-button"
             type="button"
@@ -28,15 +27,7 @@
         </button>
     </div>
     <div class="product-card-copy">
-        <div>
-            <?php if ($product->categoryName !== null): ?>
-                <p><?= $escape($product->categoryName) ?></p>
-            <?php endif; ?>
-            <h3><a href="<?= $escape($productsUrl . '/' . $product->slug) ?>"><?= $escape($product->name) ?></a></h3>
-        </div>
+        <h3><a href="<?= $escape($productsUrl . '/' . $product->slug) ?>"><?= $escape($product->name) ?></a></h3>
         <strong>$<?= $escape($product->price) ?></strong>
     </div>
-    <p class="product-stock <?= $product->stockQuantity > 0 ? 'is-available' : 'is-unavailable' ?>">
-        <?= $product->stockQuantity > 0 ? 'Ready to ship' : 'Out of stock' ?>
-    </p>
 </article>

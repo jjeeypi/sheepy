@@ -30,6 +30,30 @@ $catalog = new CatalogService(
     new CategoryRepository($database)
 );
 $view = new View($root . '/views');
+$navigation = $catalog->navigation();
+$categoryLookup = [];
+
+foreach ($navigation as $group) {
+    foreach ($group['children'] as $category) {
+        $categoryLookup[$category->slug] = $category;
+    }
+}
+
+$featuredCategories = [];
+
+foreach ([
+    'men-shirts' => ['Shirts', 'category-shirts.jpg', 'Patterned shirt'],
+    'men-jackets' => ['Outerwear', 'category-outerwear.jpg', 'Relaxed outerwear'],
+    'men-pants' => ['Denim', 'category-denim.jpg', 'Denim outfit'],
+    'men-t-shirts' => ['Tees', 'category-tees.jpg', 'Graphic T-shirt'],
+] as $slug => [$label, $image, $alt]) {
+    if (isset($categoryLookup[$slug])) {
+        $featuredCategories[] = compact('label', 'image', 'alt') + [
+            'category' => $categoryLookup[$slug],
+        ];
+    }
+}
+
 $user = new User(
     1,
     '<script>alert("unsafe")</script>',
@@ -47,7 +71,8 @@ $html = $view->render('home/index', [
     'productsUrl' => '/sheepy/public/products',
     'categoriesUrl' => '/sheepy/public/categories',
     'basePath' => '/sheepy/public',
-    'navigation' => $catalog->navigation(),
+    'navigation' => $navigation,
+    'featuredCategories' => $featuredCategories,
     'latestProducts' => $catalog->latest(),
     'cartUrl' => '/sheepy/public/cart',
     'cartItemsUrl' => '/sheepy/public/cart/items',
@@ -78,8 +103,9 @@ $check(
     'The accessible responsive navigation controls are missing.'
 );
 $check(
-    str_contains($html, 'id="departments"')
+    str_contains($html, 'id="categories"')
         && str_contains($html, 'id="latest-products-title"')
+        && str_contains($html, 'id="lookbook-title"')
         && str_contains($html, 'aria-label="Shopping benefits"'),
     'A required home-page content section is missing.'
 );
@@ -105,12 +131,20 @@ $check(
 );
 $check(
     str_contains((string) file_get_contents($root . '/public/assets/css/home.css'), '@media (max-width: 40rem)')
-        && str_contains((string) file_get_contents($root . '/public/assets/css/home.css'), 'prefers-reduced-motion'),
+        && str_contains((string) file_get_contents($root . '/public/assets/css/home.css'), 'prefers-reduced-motion')
+        && str_contains((string) file_get_contents($root . '/public/assets/css/home.css'), '--rust: #a9663d'),
     'Mobile or reduced-motion home styles are missing.'
 );
 $check(
-    str_contains((string) file_get_contents($root . '/public/assets/js/home.js'), "event.key === 'Escape'"),
-    'Keyboard dismissal is missing from the home interactions.'
+    str_contains((string) file_get_contents($root . '/public/assets/js/home.js'), "event.key === 'Escape'")
+        && str_contains($html, 'class="mobile-tabbar"'),
+    'Keyboard dismissal or mobile shortcuts are missing from the home interactions.'
+);
+$check(
+    is_file($root . '/public/assets/images/home/hero.jpg')
+        && is_file($root . '/public/assets/images/home/lookbook.jpg')
+        && count(glob($root . '/public/assets/images/home/category-*.jpg') ?: []) === 4,
+    'A mockup-supplied home image is missing.'
 );
 
 fwrite(STDOUT, 'Responsive home interface smoke test passed.' . PHP_EOL);
