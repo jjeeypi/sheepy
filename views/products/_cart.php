@@ -3,6 +3,8 @@
     data-cart-app
     data-cart-url="<?= $escape($cartUrl) ?>"
     data-cart-items-url="<?= $escape($cartItemsUrl) ?>"
+    data-checkout-url="<?= $escape($checkoutUrl) ?>"
+    data-checkout-confirm-url="<?= $escape($checkoutConfirmUrl) ?>"
     data-csrf-token="<?= $escape($csrfToken) ?>"
 >
     <button

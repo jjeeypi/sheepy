@@ -6,14 +6,13 @@ namespace App\Models;
 
 use App\Support\Money;
 
-final readonly class CartItem
+final readonly class CheckoutItem
 {
     public function __construct(
-        public int $id,
+        public int $cartItemId,
         public int $productId,
-        public string $productSlug,
         public string $productName,
-        public ?string $description,
+        public string $productSku,
         public string $unitPrice,
         public int $quantity,
         public int $stockQuantity,
@@ -23,13 +22,13 @@ final readonly class CartItem
     ) {
     }
 
-    public function lineSubtotalCents(): int
+    public function lineTotalCents(): int
     {
         return Money::toCents($this->unitPrice) * $this->quantity;
     }
 
-    public function lineSubtotal(): string
+    public function lineTotal(): string
     {
-        return Money::format($this->lineSubtotalCents());
+        return Money::format($this->lineTotalCents());
     }
 }

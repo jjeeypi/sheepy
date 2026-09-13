@@ -6,7 +6,9 @@ use App\Controllers\AdminController;
 use App\Controllers\AdminProductController;
 use App\Controllers\AuthController;
 use App\Controllers\CartController;
+use App\Controllers\CheckoutController;
 use App\Controllers\HomeController;
+use App\Controllers\OrderController;
 use App\Controllers\ProductController;
 use App\Core\Request;
 use App\Core\Response;
@@ -56,6 +58,19 @@ return static function (Router $router): void {
         $router->patch('/items/{id:\d+}', [CartController::class, 'update']);
         $router->delete('/items/{id:\d+}', [CartController::class, 'destroy']);
     }, [AuthMiddleware::class]);
+
+    $router->get('/checkout', [CheckoutController::class, 'show'], [AuthMiddleware::class]);
+    $router->post(
+        '/checkout/confirm',
+        [CheckoutController::class, 'confirm'],
+        [AuthMiddleware::class]
+    );
+    $router->get('/orders', [OrderController::class, 'index'], [AuthMiddleware::class]);
+    $router->get(
+        '/orders/{orderNumber:[A-Z0-9-]+}',
+        [OrderController::class, 'show'],
+        [AuthMiddleware::class]
+    );
 
     $router->get('/admin', [AdminController::class, 'dashboard'], [AdminMiddleware::class]);
 

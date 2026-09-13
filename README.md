@@ -2,7 +2,7 @@
 
 Sheepy is a mobile-first apparel storefront built as a Web Programming midterm project. The application is designed around a calm editorial shopping experience and a structured PHP backend powered by MariaDB and PDO.
 
-The repository currently contains the database schema, database connection layer, Phase 2 core framework, Phase 3 authentication, secure administrator product management, Phase 4 customer catalogue browsing, and the Phase 5 customer cart. Checkout and order features remain scaffolded for later development stages.
+The repository contains the database layer, Phase 2 core framework, Phase 3 authentication, secure administrator product management, Phase 4 customer catalogue browsing, Phase 5 customer cart, and Phase 6 simulated checkout with order receipts and history.
 
 ## Project Status
 
@@ -28,9 +28,10 @@ The repository currently contains the database schema, database connection layer
 - [x] Persistent add, view, update, and remove cart operations
 - [x] Mini-cart and cart-item product detail modal
 - [x] Repeatable Phase 5 cart system smoke test
-- [ ] Simulated checkout
-- [ ] Customer orders, profile, and addresses
-- [ ] Automated unit and integration tests
+- [x] Transactional simulated checkout with stock revalidation
+- [x] Customer order history and immutable receipt snapshots
+- [x] Repeatable Phase 6 checkout smoke test
+- [ ] Customer profile and saved addresses
 
 ## Planned Storefront Experience
 
@@ -249,9 +250,32 @@ Run the Phase 5 database-backed smoke test with:
 C:\xampp\php\php.exe .\tests\CartSystemSmokeTest.php
 ```
 
+## Phase 6 Checkout and Orders
+
+Phase 6 completes the purchase flow without adding a real payment gateway:
+
+- A Checkout action inside the existing mini-cart opens the checkout form in the same modal
+- The checkout view lists every cart item and its quantity, line total, subtotal, shipping, tax, and grand total
+- Required shipping fields are validated in the browser and again by the server; address values are copied into the order
+- Cancel returns to the unchanged mini-cart without sending a write request
+- Confirmation reloads current product prices and rechecks active status and stock, preventing stale-cart purchases
+- One database transaction creates the confirmed order and item snapshots, decrements product stock, and converts the active cart
+- Order items preserve the product name, SKU, unit price, quantity, and line total as they were at purchase time
+- Successful checkout shows `Purchased Successfully!` with the generated order number and links to the receipt and order history
+- Receipts are restricted to their owning customer and remain accurate after later catalogue edits
+- Shipping is `6.00` below a `75.00` subtotal and free at or above it; tax is `0.00` until a tax policy is configured
+
+Payment methods, payment gateways, discounts, coupons, and refund processing are intentionally outside this project's schema and scope.
+
+Run the Phase 6 database-backed smoke test with:
+
+```powershell
+C:\xampp\php\php.exe .\tests\CheckoutFlowSmokeTest.php
+```
+
 ## Development Notes
 
 - Do not commit `.env`, database credentials, logs, uploaded products, or generated test artifacts.
 - Keep user-uploaded product images under `public/uploads/products/`.
 - Use `database/schema.sql` only for fresh databases and apply numbered migrations in order for existing databases.
-- The scaffolded PHP feature files are intentionally incomplete and must not be presented as finished functionality until implemented and tested.
+- Add future features through the existing controller, service, repository, validator, and view boundaries, with matching tests before presenting them as complete.

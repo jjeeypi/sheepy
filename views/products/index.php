@@ -19,6 +19,7 @@
             <?php endforeach; ?>
         </nav>
         <?php require __DIR__ . '/_cart.php'; ?>
+        <a href="<?= $escape($ordersUrl) ?>">Orders</a>
         <form method="post" action="<?= $escape($logoutUrl) ?>">
             <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
             <button type="submit">Log out</button>

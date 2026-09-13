@@ -40,6 +40,9 @@ final class HomeController extends BaseController
             'latestProducts' => $this->catalog->latest(),
             'cartUrl' => $request->url('/cart'),
             'cartItemsUrl' => $request->url('/cart/items'),
+            'checkoutUrl' => $request->url('/checkout'),
+            'checkoutConfirmUrl' => $request->url('/checkout/confirm'),
+            'ordersUrl' => $request->url('/orders'),
             'cartItemCount' => $user === null ? 0 : $this->cart->itemCount($user->id),
         ]);
     }

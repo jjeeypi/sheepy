@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Support\Money;
+
 final readonly class Cart
 {
     /** @param list<CartItem> $items */
@@ -29,6 +31,6 @@ final readonly class Cart
             $this->items
         ));
 
-        return CartItem::formatCents($cents);
+        return Money::format($cents);
     }
 }

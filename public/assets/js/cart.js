@@ -37,10 +37,21 @@
         const liveRegion = app.querySelector('[data-cart-live]');
         const cartUrl = app.dataset.cartUrl;
         const itemsUrl = app.dataset.cartItemsUrl;
+        const checkoutUrl = app.dataset.checkoutUrl;
+        const checkoutConfirmUrl = app.dataset.checkoutConfirmUrl;
         const csrfToken = app.dataset.csrfToken;
         let currentCart = {items: [], item_count: 0, subtotal: '0.00'};
 
-        if (!dialog || !panel || !openButton || !badge || !cartUrl || !itemsUrl) {
+        if (
+            !dialog
+            || !panel
+            || !openButton
+            || !badge
+            || !cartUrl
+            || !itemsUrl
+            || !checkoutUrl
+            || !checkoutConfirmUrl
+        ) {
             return;
         }
 
@@ -221,10 +232,15 @@
             });
 
             const footer = createElement('footer', 'cart-summary');
-            footer.append(
+            const totals = createElement('div', 'cart-summary-row');
+            totals.append(
                 createElement('span', '', 'Subtotal'),
                 createElement('strong', '', money(cart.subtotal))
             );
+            const checkoutButton = createElement('button', 'cart-primary-button', 'Checkout');
+            checkoutButton.type = 'button';
+            checkoutButton.addEventListener('click', openCheckout);
+            footer.append(totals, checkoutButton);
             panel.append(list, footer);
         };
 
@@ -358,6 +374,182 @@
             detail.append(information);
             panel.append(detail);
             quantity.focus();
+        };
+
+        const renderCheckout = (checkout, error = null, previousValues = {}) => {
+            panel.replaceChildren();
+            panel.append(modalHeader('Checkout', () => renderCart(currentCart)));
+
+            if (error) {
+                panel.append(statusMessage(error, true));
+            }
+
+            if (!Array.isArray(checkout.items) || checkout.items.length === 0) {
+                panel.append(statusMessage('Your cart is empty. Add a product before checking out.', true));
+                const back = createElement('button', 'cart-secondary-button', 'Back to cart');
+                back.type = 'button';
+                back.addEventListener('click', () => renderCart(currentCart));
+                panel.append(back);
+                return;
+            }
+
+            const itemSection = createElement('section', 'checkout-section');
+            itemSection.append(createElement('h3', '', 'Order items'));
+            const itemList = createElement('div', 'checkout-items');
+
+            checkout.items.forEach((item) => {
+                const row = createElement('div', 'checkout-item');
+                row.append(productImage(item, 'cart-item-thumbnail'));
+                const details = createElement('div', 'cart-item-summary');
+                details.append(
+                    createElement('strong', '', item.name),
+                    createElement('span', '', `Quantity: ${item.quantity}`),
+                    createElement('span', '', `${money(item.unit_price)} each`)
+                );
+
+                if (!item.available) {
+                    details.append(createElement(
+                        'span',
+                        'cart-unavailable',
+                        `Only ${item.stock_quantity} currently available`
+                    ));
+                }
+
+                row.append(details, createElement('strong', '', money(item.line_total)));
+                itemList.append(row);
+            });
+            itemSection.append(itemList);
+
+            const summarySection = createElement('section', 'checkout-section');
+            summarySection.append(createElement('h3', '', 'Order summary'));
+            const summary = createElement('dl', 'checkout-summary');
+            [
+                ['Subtotal', checkout.subtotal],
+                ['Shipping', checkout.shipping_total],
+                ['Tax', checkout.tax_total],
+                ['Grand total', checkout.grand_total],
+            ].forEach(([label, value], index) => {
+                const row = createElement('div', index === 3 ? 'checkout-total-row' : '');
+                row.append(createElement('dt', '', label), createElement('dd', '', money(value)));
+                summary.append(row);
+            });
+            summarySection.append(summary);
+
+            const form = createElement('form', 'checkout-form');
+            form.noValidate = false;
+            form.append(createElement('h3', '', 'Shipping address'));
+            const fields = [
+                {name: 'shipping_name', label: 'Full name', max: 150, autocomplete: 'name'},
+                {name: 'shipping_phone', label: 'Phone', max: 30, type: 'tel', autocomplete: 'tel'},
+                {name: 'shipping_line1', label: 'Address line 1', max: 255, autocomplete: 'address-line1'},
+                {name: 'shipping_line2', label: 'Address line 2 (optional)', max: 255, required: false, autocomplete: 'address-line2'},
+                {name: 'shipping_city', label: 'City', max: 100, autocomplete: 'address-level2'},
+                {name: 'shipping_state', label: 'State or province', max: 100, autocomplete: 'address-level1'},
+                {name: 'shipping_postal_code', label: 'Postal code', max: 20, autocomplete: 'postal-code'},
+                {name: 'shipping_country', label: 'Country', max: 100, autocomplete: 'country-name'},
+            ];
+
+            fields.forEach((field) => {
+                const group = createElement('div', 'checkout-field');
+                const label = createElement('label', '', field.label);
+                const input = createElement('input');
+                input.type = field.type || 'text';
+                input.name = field.name;
+                input.id = `checkout-${field.name}`;
+                input.maxLength = field.max;
+                input.required = field.required !== false;
+                input.autocomplete = field.autocomplete;
+                input.value = previousValues[field.name] || '';
+                label.htmlFor = input.id;
+                group.append(label, input);
+                form.append(group);
+            });
+
+            const hasUnavailableItem = checkout.items.some((item) => !item.available);
+
+            if (hasUnavailableItem) {
+                form.append(statusMessage(
+                    'Update or remove products without enough stock before confirming.',
+                    true
+                ));
+            }
+
+            const actions = createElement('div', 'checkout-actions');
+            const confirm = createElement('button', 'cart-primary-button', 'Confirm Order');
+            const cancel = createElement('button', 'cart-secondary-button', 'Cancel');
+            confirm.type = 'submit';
+            confirm.disabled = hasUnavailableItem;
+            cancel.type = 'button';
+            cancel.addEventListener('click', () => renderCart(currentCart));
+            actions.append(confirm, cancel);
+            form.append(actions);
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                if (!form.reportValidity()) {
+                    return;
+                }
+
+                const shipping = Object.fromEntries(new FormData(form).entries());
+                confirm.disabled = true;
+                cancel.disabled = true;
+
+                try {
+                    const payload = await request(checkoutConfirmUrl, 'POST', shipping);
+                    currentCart = payload.cart;
+                    updateBadge(0);
+                    renderSuccess(payload.order);
+                    announce(payload.message);
+                } catch (requestError) {
+                    renderCheckout(checkout, requestError.message, shipping);
+                    announce(requestError.message);
+                }
+            });
+
+            panel.append(itemSection, summarySection, form);
+        };
+
+        const renderSuccess = (order) => {
+            panel.replaceChildren();
+            panel.append(modalHeader('Purchased Successfully!'));
+            const success = createElement('div', 'checkout-success');
+            success.append(
+                createElement('p', '', 'Your order has been confirmed.'),
+                createElement('strong', 'checkout-order-number', order.number),
+                createElement('p', '', `Order total: ${money(order.grand_total)}`)
+            );
+            const receipt = createElement('a', 'cart-primary-button', 'View receipt');
+            receipt.href = order.receipt_url;
+            const history = createElement('a', 'cart-secondary-button', 'Order history');
+            history.href = order.history_url;
+            const continueButton = createElement('button', 'cart-secondary-button', 'Continue shopping');
+            continueButton.type = 'button';
+            continueButton.addEventListener('click', closeDialog);
+            const actions = createElement('div', 'checkout-actions');
+            actions.append(receipt, history, continueButton);
+            success.append(actions);
+            panel.append(success);
+        };
+
+        const openCheckout = async () => {
+            panel.replaceChildren(
+                modalHeader('Checkout', () => renderCart(currentCart)),
+                statusMessage('Rechecking your cart and current prices...')
+            );
+
+            try {
+                const payload = await request(checkoutUrl);
+                renderCheckout(payload.checkout);
+            } catch (requestError) {
+                panel.replaceChildren(modalHeader('Checkout', () => renderCart(currentCart)));
+                panel.append(statusMessage(requestError.message, true));
+                const retry = createElement('button', 'cart-primary-button', 'Try again');
+                retry.type = 'button';
+                retry.addEventListener('click', openCheckout);
+                panel.append(retry);
+                announce(requestError.message);
+            }
         };
 
         const loadCart = async () => {

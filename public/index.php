@@ -15,9 +15,12 @@ use App\Repositories\UserRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\CartRepository;
+use App\Repositories\OrderRepository;
 use App\Services\AuthService;
 use App\Services\CartService;
 use App\Services\CatalogService;
+use App\Services\CheckoutPricing;
+use App\Services\CheckoutService;
 use App\Services\ProductService;
 
 $root = dirname(__DIR__);
@@ -62,9 +65,12 @@ try {
     $container->singleton(ProductRepository::class);
     $container->singleton(CategoryRepository::class);
     $container->singleton(CartRepository::class);
+    $container->singleton(OrderRepository::class);
     $container->singleton(ProductService::class);
     $container->singleton(CatalogService::class);
     $container->singleton(CartService::class);
+    $container->singleton(CheckoutPricing::class);
+    $container->singleton(CheckoutService::class);
 
     $router = new Router($container);
     $registerRoutes = require $root . '/config/routes.php';
