@@ -2,7 +2,7 @@
 
 Sheepy is a mobile-first apparel storefront built as a Web Programming midterm project. The application is designed around a calm editorial shopping experience and a structured PHP backend powered by MariaDB and PDO.
 
-The repository currently contains the database schema, database connection layer, Phase 2 core framework, and MVC-style application structure. Storefront, authentication, checkout, order, and administration features are scaffolded for the next development stages.
+The repository currently contains the database schema, database connection layer, Phase 2 core framework, and Phase 3 authentication. Storefront, checkout, order, and catalogue administration features remain scaffolded for later development stages.
 
 ## Project Status
 
@@ -16,8 +16,11 @@ The repository currently contains the database schema, database connection layer
 - [x] HTTP request, response, and routing foundation
 - [x] Rewritten application URLs with secure response headers
 - [x] Repeatable Phase 2 core framework smoke test
+- [x] Customer registration and username/email login
+- [x] Secure sessions, password hashing, and CSRF protection
+- [x] Customer/admin access middleware and role-based redirects
+- [x] Repeatable Phase 3 authentication smoke test
 - [ ] Storefront and product search
-- [ ] Registration, login, and secure sessions
 - [ ] Cart and simulated checkout
 - [ ] Customer orders, profile, and addresses
 - [ ] Administrator product CRUD
@@ -155,6 +158,28 @@ Run the Phase 2 smoke test with the local PHP executable:
 ```powershell
 C:\xampp\php\php.exe .\tests\CoreFrameworkSmokeTest.php
 ```
+
+## Phase 3 Authentication
+
+Phase 3 provides an intentionally unstyled HTML authentication flow so the final interface can be added later without mixing presentation work into the security layer:
+
+- Customer registration with matching client-side and server-side rules
+- Login using either username or email with a generic invalid-credentials response
+- Prepared account queries and one-way password hashing
+- Strict, HTTP-only, same-site sessions with idle expiry and identifier rotation
+- CSRF protection for registration, login, and logout
+- Guest, signed-in customer, and administrator route middleware
+- Customer redirects to Home and administrator redirects to Dashboard
+- Escaped dynamic HTML and private technical error logging
+
+Run both completed framework tests with:
+
+```powershell
+C:\xampp\php\php.exe .\tests\CoreFrameworkSmokeTest.php
+C:\xampp\php\php.exe .\tests\AuthenticationSmokeTest.php
+```
+
+Administrator credentials are local-only and are intentionally omitted from this document. Never paste account credentials into source files, documentation, screenshots, issues, or commits.
 
 ## Development Notes
 

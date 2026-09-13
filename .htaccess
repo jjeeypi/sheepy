@@ -1,0 +1,11 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Deny hidden files (including .env and .git) from the web.
+    RewriteRule (^|/)\. - [F,L]
+
+    # Only public/ is an HTTP entry point; application and private files stay server-side.
+    RewriteRule ^(?:config|database|Project_Info|scripts|src|storage|tests|views)(?:/|$) - [F,L,NC]
+</IfModule>

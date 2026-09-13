@@ -8,6 +8,11 @@ use App\Core\Database;
 use App\Core\Request;
 use App\Core\Response;
 use App\Core\Router;
+use App\Core\Session;
+use App\Core\View;
+use App\Core\Csrf;
+use App\Repositories\UserRepository;
+use App\Services\AuthService;
 
 $root = dirname(__DIR__);
 
@@ -39,10 +44,15 @@ try {
     $databaseConfig = require $root . '/config/database.php';
     $container = new Container();
     $container->instance('config.app', $appConfig);
+    $container->instance(Session::class, Session::start($appConfig['session'] ?? []));
+    $container->singleton(Csrf::class);
+    $container->singleton(View::class);
     $container->singleton(
         Database::class,
         static fn (): Database => new Database($databaseConfig)
     );
+    $container->singleton(UserRepository::class);
+    $container->singleton(AuthService::class);
 
     $router = new Router($container);
     $registerRoutes = require $root . '/config/routes.php';

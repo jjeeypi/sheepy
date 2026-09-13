@@ -36,7 +36,8 @@ final class Request
         private readonly array $server = [],
         array $headers = [],
         private readonly string $rawBody = '',
-        private readonly ?string $overriddenMethod = null
+        private readonly ?string $overriddenMethod = null,
+        private readonly string $applicationBasePath = ''
     ) {
         $normalizedHeaders = [];
 
@@ -96,7 +97,8 @@ final class Request
         $uri = (string) ($server['REQUEST_URI'] ?? '/');
         $path = parse_url($uri, PHP_URL_PATH);
         $path = is_string($path) && $path !== '' ? $path : '/';
-        $path = self::stripBasePath($path, $basePath ?? self::detectBasePath($server));
+        $applicationBasePath = $basePath ?? self::detectBasePath($server);
+        $path = self::stripBasePath($path, $applicationBasePath);
 
         return new self(
             $originalMethod,
@@ -108,7 +110,8 @@ final class Request
             $server,
             $headers,
             $rawBody,
-            $overriddenMethod
+            $overriddenMethod,
+            $applicationBasePath
         );
     }
 
@@ -138,6 +141,20 @@ final class Request
     public function path(): string
     {
         return self::normalizePath($this->requestPath);
+    }
+
+    public function basePath(): string
+    {
+        $basePath = '/' . trim(str_replace('\\', '/', $this->applicationBasePath), '/');
+
+        return $basePath === '/' ? '' : $basePath;
+    }
+
+    public function url(string $path = '/'): string
+    {
+        $path = self::normalizePath($path);
+
+        return $this->basePath() . $path;
     }
 
     /** @return array<string, mixed>|mixed */
