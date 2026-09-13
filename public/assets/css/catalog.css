@@ -97,8 +97,8 @@
     display: inline-flex;
     font-size: 0.76rem;
     font-weight: 500;
-    min-height: 2.65rem;
-    padding: 0.65rem 1rem;
+    min-height: 2.75rem;  /* 44px touch target */
+    padding: 0.65rem 1.1rem;
     text-decoration: none;
     transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
 }
@@ -283,14 +283,20 @@
         font-size: clamp(3rem, 8vw, 4.4rem);
     }
 
+    /* Horizontal scroll pill strip — hide scrollbar visually */
     .category-filters {
+        -webkit-overflow-scrolling: touch; /* momentum scrolling on iOS */
         flex-wrap: nowrap;
         margin-inline: 0;
         max-width: none;
         overflow-x: auto;
         padding-inline: 2rem;
-        scrollbar-width: thin;
+        scrollbar-width: none;  /* Firefox — hide */
         width: 100%;
+    }
+
+    .category-filters::-webkit-scrollbar {
+        display: none;  /* Chrome/Safari — hide */
     }
 
     .category-filters a {
@@ -311,26 +317,28 @@
 @media (max-width: 40rem) {
     .catalog-hero,
     .catalog-hero.has-media {
-        border-radius: 1.25rem;
+        border-radius: 1rem;
         grid-template-columns: 1fr;
-        margin-top: 1.25rem;
+        margin-top: 1rem;
+        min-height: auto;
     }
 
     .catalog-hero-copy {
-        padding: 2rem 1.25rem;
+        padding: 1.75rem 1.25rem;
     }
 
     .catalog-hero h1 {
-        font-size: 3.2rem;
+        font-size: clamp(2.6rem, 9vw, 3.5rem);
     }
 
     .catalog-description {
-        font-size: 0.9rem;
+        font-size: 0.88rem;
+        margin-top: 0.85rem;
     }
 
     .catalog-hero-media {
-        max-height: 17rem;
-        min-height: 17rem;
+        max-height: 14rem;
+        min-height: 14rem;
         order: -1;
     }
 
@@ -339,21 +347,32 @@
     }
 
     .category-filters {
-        padding-inline: 1.25rem;
+        padding-inline: 1rem;
     }
 
     .catalog-toolbar {
-        gap: 1.25rem;
+        gap: 1rem;
     }
 
+    .catalog-toolbar h2 {
+        font-size: 1.85rem;
+    }
+
+    /* Search stacks input above full-width button */
     .catalog-search {
         border-radius: 0.85rem;
         grid-template-columns: auto minmax(0, 1fr);
-        padding: 0.45rem 0.65rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .catalog-search input {
+        min-height: 2.75rem;
     }
 
     .catalog-search button {
         grid-column: 1 / -1;
+        margin-top: 0.25rem;
+        min-height: 2.75rem;
         width: 100%;
     }
 
@@ -363,12 +382,19 @@
         gap: 0.5rem;
     }
 
+    /* Pagination: bigger touch targets */
     .pagination {
-        gap: 0.7rem;
+        gap: 0;
+        margin-top: 2rem;
+    }
+
+    .pagination a {
+        min-height: 2.75rem;
+        padding: 0.5rem 0;
     }
 
     .pagination a,
     .pagination > span {
-        font-size: 0.72rem;
+        font-size: 0.78rem;
     }
 }
