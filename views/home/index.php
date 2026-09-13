@@ -13,7 +13,7 @@
         <?php endif; ?>
 
         <nav aria-label="Store navigation">
-            <a href="<?= $escape($productsUrl) ?>">All Products</a>
+            <a href="<?= $escape($homeUrl) ?>">Home</a>
             <?php foreach ($navigation as $group): ?>
                 <a href="<?= $escape($categoriesUrl . '/' . $group['department']->slug) ?>">
                     <?= $escape($group['department']->name) ?>

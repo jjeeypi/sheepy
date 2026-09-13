@@ -28,6 +28,7 @@ final class HomeController extends BaseController
             'user' => $this->auth->currentUser(),
             'csrfToken' => $this->csrf->token(),
             'logoutUrl' => $request->url('/logout'),
+            'homeUrl' => $request->url('/home'),
             'productsUrl' => $request->url('/products'),
             'categoriesUrl' => $request->url('/categories'),
             'basePath' => $request->basePath(),

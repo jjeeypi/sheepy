@@ -43,6 +43,7 @@ final class ProductController extends BaseController
 
         return $this->render('products/show', [
             ...$result,
+            'navigation' => $this->catalog->navigation(),
             'user' => $this->auth->currentUser(),
             'csrfToken' => $this->csrf->token(),
             'logoutUrl' => $request->url('/logout'),

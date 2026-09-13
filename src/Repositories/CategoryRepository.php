@@ -48,7 +48,13 @@ final class CategoryRepository implements RepositoryInterface
             'SELECT category_id, parent_category_id, name, slug
              FROM categories
              WHERE parent_category_id IS NULL
-             ORDER BY name ASC, category_id ASC'
+             ORDER BY CASE slug
+                 WHEN \'men\' THEN 1
+                 WHEN \'women\' THEN 2
+                 WHEN \'kids\' THEN 3
+                 WHEN \'accessories\' THEN 4
+                 ELSE 5
+             END, name ASC, category_id ASC'
         );
 
         return $this->hydrateMany($statement->fetchAll());

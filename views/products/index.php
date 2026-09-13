@@ -7,9 +7,9 @@
 </head>
 <body>
     <header>
-        <a href="<?= $escape($homeUrl) ?>">Sheepy Home</a>
+        <strong>Sheepy</strong>
         <nav aria-label="Departments">
-            <a href="<?= $escape($productsUrl) ?>">All Products</a>
+            <a href="<?= $escape($homeUrl) ?>">Home</a>
             <?php foreach ($navigation as $group): ?>
                 <a href="<?= $escape($categoriesUrl . '/' . $group['department']->slug) ?>">
                     <?= $escape($group['department']->name) ?>

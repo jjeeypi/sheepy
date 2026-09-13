@@ -7,8 +7,15 @@
 </head>
 <body>
     <header>
-        <a href="<?= $escape($homeUrl) ?>">Sheepy Home</a>
-        <a href="<?= $escape($productsUrl) ?>">All Products</a>
+        <strong>Sheepy</strong>
+        <nav aria-label="Departments">
+            <a href="<?= $escape($homeUrl) ?>">Home</a>
+            <?php foreach ($navigation as $group): ?>
+                <a href="<?= $escape($categoriesUrl . '/' . $group['department']->slug) ?>">
+                    <?= $escape($group['department']->name) ?>
+                </a>
+            <?php endforeach; ?>
+        </nav>
         <form method="post" action="<?= $escape($logoutUrl) ?>">
             <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
             <button type="submit">Log out</button>

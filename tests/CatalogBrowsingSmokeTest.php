@@ -33,11 +33,10 @@ $departmentNames = array_map(
     static fn (array $group): string => $group['department']->name,
     $navigation
 );
-sort($departmentNames);
 
 $check(
-    $departmentNames === ['Accessories', 'Kids', 'Men', 'Women'],
-    'The required storefront departments are unavailable.'
+    $departmentNames === ['Men', 'Women', 'Kids', 'Accessories'],
+    'The storefront departments are unavailable or incorrectly ordered.'
 );
 
 foreach ($navigation as $group) {
