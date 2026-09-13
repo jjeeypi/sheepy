@@ -2,7 +2,7 @@
 
 Sheepy is a mobile-first apparel storefront built as a Web Programming midterm project. The application is designed around a calm editorial shopping experience and a structured PHP backend powered by MariaDB and PDO.
 
-The repository currently contains the database schema, the database connection layer, and the MVC-style application structure. Storefront, authentication, checkout, order, and administration features are scaffolded for the next development stages.
+The repository currently contains the database schema, database connection layer, Phase 2 core framework, and MVC-style application structure. Storefront, authentication, checkout, order, and administration features are scaffolded for the next development stages.
 
 ## Project Status
 
@@ -11,6 +11,11 @@ The repository currently contains the database schema, the database connection l
 - [x] Native prepared-statement mode
 - [x] Reusable transaction support
 - [x] Safe database connection error response
+- [x] PSR-4-style application autoloader
+- [x] Dependency injection container with constructor autowiring
+- [x] HTTP request, response, and routing foundation
+- [x] Rewritten application URLs with secure response headers
+- [x] Repeatable Phase 2 core framework smoke test
 - [ ] Storefront and product search
 - [ ] Registration, login, and secure sessions
 - [ ] Cart and simulated checkout
@@ -131,7 +136,25 @@ Database settings are loaded from real environment variables first and `.env` se
 - Provides automatic commit/rollback transaction handling
 - Wraps connection failures in a generic application exception
 
-The public front controller catches connection failures, logs a safe diagnostic message, and returns HTTP `503` without exposing credentials or raw PDO errors.
+The public front controller catches uncaught failures, logs technical details privately, and returns a generic HTTP `500` response without exposing credentials or raw PDO errors.
+
+## Phase 2 Core Framework
+
+Phase 2 provides the reusable request lifecycle for later project phases:
+
+- Namespace-based class loading from `src/`
+- Container bindings, singleton services, and constructor autowiring
+- Normalized request paths, input access, JSON parsing, and form method overrides
+- Immutable HTML, JSON, text, redirect, and empty responses
+- Route groups, constrained parameters, controller handlers, and middleware pipelines
+- Correct `404`, `405`, `HEAD`, and `OPTIONS` behavior
+- Central exception logging with safe browser-facing errors
+
+Run the Phase 2 smoke test with the local PHP executable:
+
+```powershell
+C:\xampp\php\php.exe .\tests\CoreFrameworkSmokeTest.php
+```
 
 ## Development Notes
 

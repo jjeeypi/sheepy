@@ -2,26 +2,73 @@
 
 declare(strict_types=1);
 
+use App\Core\Autoloader;
+use App\Core\Container;
 use App\Core\Database;
+use App\Core\Request;
+use App\Core\Response;
+use App\Core\Router;
 
-require_once dirname(__DIR__) . '/src/Core/Database.php';
+$root = dirname(__DIR__);
+
+require_once $root . '/src/Core/Autoloader.php';
+
+Autoloader::register(['App\\' => $root . '/src']);
+
+$appConfig = require $root . '/config/app.php';
+
+date_default_timezone_set($appConfig['timezone']);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+ini_set('error_log', $appConfig['error_log']);
+
+set_error_handler(static function (
+    int $severity,
+    string $message,
+    string $file,
+    int $line
+): bool {
+    if ((error_reporting() & $severity) === 0) {
+        return false;
+    }
+
+    throw new ErrorException($message, 0, $severity, $file, $line);
+});
 
 try {
-    $database = new Database(require dirname(__DIR__) . '/config/database.php');
-    $database->connection()->query('SELECT 1');
-
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode(
-        ['application' => 'Sheepy', 'database' => 'connected'],
-        JSON_THROW_ON_ERROR
+    $databaseConfig = require $root . '/config/database.php';
+    $container = new Container();
+    $container->instance('config.app', $appConfig);
+    $container->singleton(
+        Database::class,
+        static fn (): Database => new Database($databaseConfig)
     );
-} catch (Throwable $exception) {
-    error_log(sprintf('[Sheepy database] %s', $exception->getMessage()));
 
-    http_response_code(503);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode([
-        'application' => 'Sheepy',
-        'error' => 'The service is temporarily unavailable. Please try again later.',
-    ]);
+    $router = new Router($container);
+    $registerRoutes = require $root . '/config/routes.php';
+
+    if (!is_callable($registerRoutes)) {
+        throw new RuntimeException('The route configuration must return a callable.');
+    }
+
+    $registerRoutes($router);
+
+    $request = Request::capture();
+    $response = $router->dispatch($request);
+    $response->send(!$request->isMethod('HEAD'));
+} catch (UnexpectedValueException $exception) {
+    Response::json(['error' => 'The request body is invalid.'], 400)->send();
+} catch (Throwable $exception) {
+    error_log(sprintf(
+        '[%s] %s in %s:%d',
+        $appConfig['name'],
+        $exception->getMessage(),
+        $exception->getFile(),
+        $exception->getLine()
+    ));
+
+    Response::json(
+        ['error' => 'An unexpected error occurred. Please try again later.'],
+        500
+    )->send();
 }
