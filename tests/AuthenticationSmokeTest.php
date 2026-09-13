@@ -88,6 +88,54 @@ $check(
     str_contains($html, '&lt;script&gt;alert(1)&lt;/script&gt;'),
     'Escaped view output was not rendered as expected.'
 );
+$check(
+    str_contains($html, 'assets/css/auth.css')
+    && str_contains($html, 'assets/js/auth.js'),
+    'Authentication assets were not linked from the login view.'
+);
+$check(
+    str_contains($html, 'data-password-toggle="password"')
+    && str_contains($html, 'aria-labelledby="auth-title"'),
+    'The accessible login interactions are missing.'
+);
+
+$registrationHtml = $view->render('auth/register', [
+    'errors' => ['email' => 'Enter a valid email address.'],
+    'old' => [
+        'username' => 'customer.one',
+        'email' => 'invalid-email',
+        'phone' => '+63 900 000 0000',
+    ],
+    'csrfToken' => $csrf->token(),
+    'loginUrl' => '/login',
+    'registerUrl' => '/register',
+]);
+$check(
+    str_contains($registrationHtml, 'data-registration-form')
+    && str_contains($registrationHtml, 'data-password-meter')
+    && str_contains($registrationHtml, 'data-password-confirmation'),
+    'Registration password feedback hooks are missing.'
+);
+$check(
+    str_contains($registrationHtml, 'id="email-error"')
+    && str_contains($registrationHtml, 'aria-invalid="true"'),
+    'Registration errors are not connected to their fields.'
+);
+
+$authCss = file_get_contents(dirname(__DIR__) . '/public/assets/css/auth.css');
+$authScript = file_get_contents(dirname(__DIR__) . '/public/assets/js/auth.js');
+$check(
+    is_string($authCss)
+    && str_contains($authCss, '@media (max-width: 640px)')
+    && str_contains($authCss, '@media (prefers-reduced-motion: reduce)'),
+    'The authentication stylesheet lacks responsive or reduced-motion support.'
+);
+$check(
+    is_string($authScript)
+    && str_contains($authScript, 'initializePasswordToggles')
+    && str_contains($authScript, 'initializeRegistrationFeedback'),
+    'The authentication interaction script is incomplete.'
+);
 
 $session->invalidate();
 

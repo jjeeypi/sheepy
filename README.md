@@ -17,6 +17,7 @@ The repository contains the database layer, Phase 2 core framework, Phase 3 auth
 - [x] Rewritten application URLs with secure response headers
 - [x] Repeatable Phase 2 core framework smoke test
 - [x] Customer registration and username/email login
+- [x] Responsive mockup-aligned login and registration interface
 - [x] Secure sessions, password hashing, and CSRF protection
 - [x] Customer/admin access middleware and role-based redirects
 - [x] Repeatable Phase 3 authentication smoke test
@@ -170,10 +171,14 @@ C:\xampp\php\php.exe .\tests\CoreFrameworkSmokeTest.php
 
 ## Phase 3 Authentication
 
-Phase 3 provides an intentionally unstyled HTML authentication flow so the final interface can be added later without mixing presentation work into the security layer:
+Phase 3 provides a responsive authentication experience based on the supplied Sheepy mockup while keeping presentation, interaction, validation, and account logic separated:
 
 - Customer registration with matching client-side and server-side rules
 - Login using either username or email with a generic invalid-credentials response
+- Shared warm-neutral visual system with editorial headings, rounded form controls, and responsive desktop/mobile layouts
+- Accessible labels, error associations, focus states, password visibility controls, Caps Lock hints, and reduced-motion support
+- Live password-strength and confirmation feedback that matches the backend password policy
+- Dedicated `public/assets/css/auth.css` and `public/assets/js/auth.js` frontend assets
 - Prepared account queries and one-way password hashing
 - Strict, HTTP-only, same-site sessions with idle expiry and identifier rotation
 - CSRF protection for registration, login, and logout

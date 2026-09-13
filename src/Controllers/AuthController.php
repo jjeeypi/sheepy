@@ -120,6 +120,7 @@ final class AuthController extends BaseController
             'csrfToken' => $this->csrf->token(),
             'loginUrl' => $request->url('/login'),
             'registerUrl' => $request->url('/register'),
+            ...$this->assetUrls($request),
         ], $status);
     }
 
@@ -136,6 +137,16 @@ final class AuthController extends BaseController
             'csrfToken' => $this->csrf->token(),
             'registerUrl' => $request->url('/register'),
             'loginUrl' => $request->url('/login'),
+            ...$this->assetUrls($request),
         ], $status);
+    }
+
+    /** @return array{authCssUrl: string, authJsUrl: string} */
+    private function assetUrls(Request $request): array
+    {
+        return [
+            'authCssUrl' => $request->url('/assets/css/auth.css'),
+            'authJsUrl' => $request->url('/assets/js/auth.js'),
+        ];
     }
 }
