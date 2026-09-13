@@ -17,6 +17,12 @@ final class AuthMiddleware
     public function handle(Request $request, callable $next): Response
     {
         if ($this->auth->currentUser() === null) {
+            if ($request->expectsJson()) {
+                return Response::json([
+                    'error' => 'Authentication is required.',
+                ], 401)->withHeader('Cache-Control', 'no-store');
+            }
+
             return Response::redirect($request->url('/login'));
         }
 

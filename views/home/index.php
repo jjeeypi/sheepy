@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home | Sheepy</title>
+    <link rel="stylesheet" href="<?= $escape($basePath) ?>/assets/css/cart.css">
+    <script src="<?= $escape($basePath) ?>/assets/js/cart.js" defer></script>
 </head>
 <body>
-    <main>
+    <header>
         <h1>Home</h1>
         <?php if ($user instanceof \App\Models\User): ?>
             <p>Welcome, <?= $escape($user->username) ?>.</p>
@@ -21,6 +23,15 @@
             <?php endforeach; ?>
         </nav>
 
+        <?php require dirname(__DIR__) . '/products/_cart.php'; ?>
+
+        <form method="post" action="<?= $escape($logoutUrl) ?>">
+            <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
+            <button type="submit">Log out</button>
+        </form>
+    </header>
+
+    <main>
         <form method="get" action="<?= $escape($productsUrl) ?>" role="search">
             <label for="home-search">Search products</label>
             <input
@@ -69,10 +80,6 @@
             <?php endif; ?>
         </section>
 
-        <form method="post" action="<?= $escape($logoutUrl) ?>">
-            <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
-            <button type="submit">Log out</button>
-        </form>
     </main>
 </body>
 </html>

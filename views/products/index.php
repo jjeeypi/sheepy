@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $category === null ? 'Products' : $escape($category->name) ?> | Sheepy</title>
+    <link rel="stylesheet" href="<?= $escape($basePath) ?>/assets/css/cart.css">
+    <script src="<?= $escape($basePath) ?>/assets/js/cart.js" defer></script>
 </head>
 <body>
     <header>
@@ -16,6 +18,7 @@
                 </a>
             <?php endforeach; ?>
         </nav>
+        <?php require __DIR__ . '/_cart.php'; ?>
         <form method="post" action="<?= $escape($logoutUrl) ?>">
             <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
             <button type="submit">Log out</button>

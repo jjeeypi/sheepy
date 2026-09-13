@@ -9,6 +9,7 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Core\View;
 use App\Services\AuthService;
+use App\Services\CartService;
 use App\Services\CatalogService;
 
 final class HomeController extends BaseController
@@ -17,15 +18,18 @@ final class HomeController extends BaseController
         View $view,
         private readonly AuthService $auth,
         private readonly Csrf $csrf,
-        private readonly CatalogService $catalog
+        private readonly CatalogService $catalog,
+        private readonly CartService $cart
     ) {
         parent::__construct($view);
     }
 
     public function index(Request $request): Response
     {
+        $user = $this->auth->currentUser();
+
         return $this->render('home/index', [
-            'user' => $this->auth->currentUser(),
+            'user' => $user,
             'csrfToken' => $this->csrf->token(),
             'logoutUrl' => $request->url('/logout'),
             'homeUrl' => $request->url('/home'),
@@ -34,6 +38,9 @@ final class HomeController extends BaseController
             'basePath' => $request->basePath(),
             'navigation' => $this->catalog->navigation(),
             'latestProducts' => $this->catalog->latest(),
+            'cartUrl' => $request->url('/cart'),
+            'cartItemsUrl' => $request->url('/cart/items'),
+            'cartItemCount' => $user === null ? 0 : $this->cart->itemCount($user->id),
         ]);
     }
 }

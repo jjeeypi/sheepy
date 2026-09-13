@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controllers\AdminController;
 use App\Controllers\AdminProductController;
 use App\Controllers\AuthController;
+use App\Controllers\CartController;
 use App\Controllers\HomeController;
 use App\Controllers\ProductController;
 use App\Core\Request;
@@ -48,6 +49,14 @@ return static function (Router $router): void {
         [ProductController::class, 'category'],
         [AuthMiddleware::class]
     );
+
+    $router->group('/cart', static function (Router $router): void {
+        $router->get('', [CartController::class, 'index']);
+        $router->post('/items', [CartController::class, 'store']);
+        $router->patch('/items/{id:\d+}', [CartController::class, 'update']);
+        $router->delete('/items/{id:\d+}', [CartController::class, 'destroy']);
+    }, [AuthMiddleware::class]);
+
     $router->get('/admin', [AdminController::class, 'dashboard'], [AdminMiddleware::class]);
 
     $router->group('/admin/products', static function (Router $router): void {

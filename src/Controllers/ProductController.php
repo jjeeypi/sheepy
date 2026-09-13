@@ -10,6 +10,7 @@ use App\Core\Response;
 use App\Core\View;
 use App\Exceptions\NotFoundException;
 use App\Services\AuthService;
+use App\Services\CartService;
 use App\Services\CatalogService;
 
 final class ProductController extends BaseController
@@ -18,7 +19,8 @@ final class ProductController extends BaseController
         View $view,
         private readonly CatalogService $catalog,
         private readonly AuthService $auth,
-        private readonly Csrf $csrf
+        private readonly Csrf $csrf,
+        private readonly CartService $cart
     ) {
         parent::__construct($view);
     }
@@ -41,16 +43,21 @@ final class ProductController extends BaseController
             return $this->notFoundPage();
         }
 
+        $user = $this->auth->currentUser();
+
         return $this->render('products/show', [
             ...$result,
             'navigation' => $this->catalog->navigation(),
-            'user' => $this->auth->currentUser(),
+            'user' => $user,
             'csrfToken' => $this->csrf->token(),
             'logoutUrl' => $request->url('/logout'),
             'homeUrl' => $request->url('/home'),
             'productsUrl' => $request->url('/products'),
             'categoriesUrl' => $request->url('/categories'),
             'basePath' => $request->basePath(),
+            'cartUrl' => $request->url('/cart'),
+            'cartItemsUrl' => $request->url('/cart/items'),
+            'cartItemCount' => $user === null ? 0 : $this->cart->itemCount($user->id),
         ]);
     }
 
@@ -85,10 +92,12 @@ final class ProductController extends BaseController
             return $request->url($browsePath) . ($queryString === '' ? '' : '?' . $queryString);
         };
 
+        $user = $this->auth->currentUser();
+
         return $this->render('products/index', [
             ...$result,
             'navigation' => $this->catalog->navigation(),
-            'user' => $this->auth->currentUser(),
+            'user' => $user,
             'csrfToken' => $this->csrf->token(),
             'logoutUrl' => $request->url('/logout'),
             'homeUrl' => $request->url('/home'),
@@ -102,6 +111,9 @@ final class ProductController extends BaseController
                 ? $pageUrl($result['page'] + 1)
                 : null,
             'basePath' => $request->basePath(),
+            'cartUrl' => $request->url('/cart'),
+            'cartItemsUrl' => $request->url('/cart/items'),
+            'cartItemCount' => $user === null ? 0 : $this->cart->itemCount($user->id),
         ]);
     }
 }

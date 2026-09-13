@@ -2,7 +2,7 @@
 
 Sheepy is a mobile-first apparel storefront built as a Web Programming midterm project. The application is designed around a calm editorial shopping experience and a structured PHP backend powered by MariaDB and PDO.
 
-The repository currently contains the database schema, database connection layer, Phase 2 core framework, Phase 3 authentication, secure administrator product management, and Phase 4 customer catalogue browsing. Cart, checkout, and order features remain scaffolded for later development stages.
+The repository currently contains the database schema, database connection layer, Phase 2 core framework, Phase 3 authentication, secure administrator product management, Phase 4 customer catalogue browsing, and the Phase 5 customer cart. Checkout and order features remain scaffolded for later development stages.
 
 ## Project Status
 
@@ -25,7 +25,10 @@ The repository currently contains the database schema, database connection layer
 - [x] Repeatable product-management smoke test
 - [x] Storefront categories, product search, images, and product details
 - [x] Repeatable Phase 4 catalogue browsing smoke test
-- [ ] Cart and simulated checkout
+- [x] Persistent add, view, update, and remove cart operations
+- [x] Mini-cart and cart-item product detail modal
+- [x] Repeatable Phase 5 cart system smoke test
+- [ ] Simulated checkout
 - [ ] Customer orders, profile, and addresses
 - [ ] Automated unit and integration tests
 
@@ -223,6 +226,27 @@ Run the Phase 4 database-backed smoke test with:
 
 ```powershell
 C:\xampp\php\php.exe .\tests\CatalogBrowsingSmokeTest.php
+```
+
+## Phase 5 Cart System
+
+Phase 5 adds a persistent cart for each authenticated customer while keeping the interface modular for the final UI/UX stage:
+
+- Add-to-cart controls on catalogue cards and product pages
+- One active cart row per product, with repeated adds increasing its quantity
+- A header cart icon with a live total-quantity badge
+- A mini-cart modal showing thumbnails, names, quantities, line subtotals, and the grand subtotal
+- A product detail view inside the same modal, with the image, description, unit price, and stock-aware quantity controls
+- Update and remove actions plus a Back to cart control that replaces modal content instead of stacking dialogs
+- Exact decimal money calculations without floating-point totals
+- Client-side quantity limits and authoritative server-side validation
+- Transactional stock checks, PDO prepared statements, CSRF protection, and per-user item ownership checks
+- Friendly empty, unavailable-product, validation, authentication, and network states
+
+Run the Phase 5 database-backed smoke test with:
+
+```powershell
+C:\xampp\php\php.exe .\tests\CartSystemSmokeTest.php
 ```
 
 ## Development Notes

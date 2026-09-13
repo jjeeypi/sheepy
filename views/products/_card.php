@@ -15,4 +15,12 @@
     <?php endif; ?>
     <p>$<?= $escape($product->price) ?></p>
     <p><?= $product->stockQuantity > 0 ? 'In stock' : 'Out of stock' ?></p>
+    <button
+        type="button"
+        data-add-to-cart
+        data-product-id="<?= $escape($product->id) ?>"
+        <?= $product->stockQuantity < 1 ? 'disabled' : '' ?>
+    >
+        <?= $product->stockQuantity > 0 ? 'Add to cart' : 'Out of stock' ?>
+    </button>
 </article>

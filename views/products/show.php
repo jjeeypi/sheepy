@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $escape($product->name) ?> | Sheepy</title>
+    <link rel="stylesheet" href="<?= $escape($basePath) ?>/assets/css/cart.css">
+    <script src="<?= $escape($basePath) ?>/assets/js/cart.js" defer></script>
 </head>
 <body>
     <header>
@@ -16,6 +18,7 @@
                 </a>
             <?php endforeach; ?>
         </nav>
+        <?php require __DIR__ . '/_cart.php'; ?>
         <form method="post" action="<?= $escape($logoutUrl) ?>">
             <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
             <button type="submit">Log out</button>
@@ -58,6 +61,28 @@
                 ? $escape($product->stockQuantity) . ' in stock'
                 : 'Out of stock' ?>
         </p>
+
+        <div class="product-cart-controls">
+            <label for="product-quantity">Quantity</label>
+            <input
+                id="product-quantity"
+                type="number"
+                min="1"
+                max="<?= $escape(max(1, $product->stockQuantity)) ?>"
+                value="1"
+                inputmode="numeric"
+                <?= $product->stockQuantity < 1 ? 'disabled' : '' ?>
+            >
+            <button
+                type="button"
+                data-add-to-cart
+                data-product-id="<?= $escape($product->id) ?>"
+                data-quantity-input="product-quantity"
+                <?= $product->stockQuantity < 1 ? 'disabled' : '' ?>
+            >
+                <?= $product->stockQuantity > 0 ? 'Add to cart' : 'Out of stock' ?>
+            </button>
+        </div>
 
         <section aria-labelledby="description-title">
             <h2 id="description-title">Description</h2>

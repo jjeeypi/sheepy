@@ -14,7 +14,9 @@ use App\Core\Csrf;
 use App\Repositories\UserRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\CategoryRepository;
+use App\Repositories\CartRepository;
 use App\Services\AuthService;
+use App\Services\CartService;
 use App\Services\CatalogService;
 use App\Services\ProductService;
 
@@ -59,8 +61,10 @@ try {
     $container->singleton(AuthService::class);
     $container->singleton(ProductRepository::class);
     $container->singleton(CategoryRepository::class);
+    $container->singleton(CartRepository::class);
     $container->singleton(ProductService::class);
     $container->singleton(CatalogService::class);
+    $container->singleton(CartService::class);
 
     $router = new Router($container);
     $registerRoutes = require $root . '/config/routes.php';
