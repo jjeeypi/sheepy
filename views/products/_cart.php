@@ -11,6 +11,7 @@
         class="cart-trigger"
         type="button"
         data-cart-open
+        aria-label="Open shopping cart"
         aria-haspopup="dialog"
         aria-controls="cart-dialog"
     >
