@@ -8,6 +8,7 @@ use App\Core\Database;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\ProductInUseException;
 use App\Models\Product;
+use App\Models\ProductImage;
 use PDO;
 
 final class ProductRepository implements RepositoryInterface
@@ -67,6 +68,87 @@ final class ProductRepository implements RepositoryInterface
         $row = $statement->fetch();
 
         return is_array($row) ? $this->hydrate($row) : null;
+    }
+
+    /**
+     * @param list<int> $categoryIds
+     * @return list<Product>
+     */
+    public function storefrontProducts(
+        array $categoryIds,
+        string $search,
+        int $limit,
+        int $offset
+    ): array {
+        [$where, $parameters] = $this->storefrontFilter($categoryIds, $search);
+        $statement = $this->database->connection()->prepare(
+            self::PRODUCT_SELECT
+            . $where
+            . ' ORDER BY p.created_at DESC, p.product_id DESC LIMIT :result_limit OFFSET :result_offset'
+        );
+
+        foreach ($parameters as $name => $value) {
+            $statement->bindValue(':' . $name, $value, is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR);
+        }
+
+        $statement->bindValue(':result_limit', $limit, PDO::PARAM_INT);
+        $statement->bindValue(':result_offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+        $products = [];
+
+        while (($row = $statement->fetch()) !== false) {
+            $products[] = $this->hydrate($row);
+        }
+
+        return $products;
+    }
+
+    /** @param list<int> $categoryIds */
+    public function countStorefrontProducts(array $categoryIds, string $search): int
+    {
+        [$where, $parameters] = $this->storefrontFilter($categoryIds, $search);
+        $statement = $this->database->connection()->prepare(
+            'SELECT COUNT(*) FROM products p' . $where
+        );
+        $statement->execute($parameters);
+
+        return (int) $statement->fetchColumn();
+    }
+
+    public function findStorefrontBySlug(string $slug): ?Product
+    {
+        $statement = $this->database->connection()->prepare(
+            self::PRODUCT_SELECT
+            . ' WHERE p.slug = :slug AND p.is_active = 1 AND p.deleted_at IS NULL LIMIT 1'
+        );
+        $statement->execute(['slug' => $slug]);
+        $row = $statement->fetch();
+
+        return is_array($row) ? $this->hydrate($row) : null;
+    }
+
+    /** @return list<ProductImage> */
+    public function storefrontImages(int $productId): array
+    {
+        $statement = $this->database->connection()->prepare(
+            'SELECT product_image_id, url, alt_text, sort_order
+             FROM product_images
+             WHERE product_id = :product_id
+             ORDER BY sort_order ASC, product_image_id ASC'
+        );
+        $statement->execute(['product_id' => $productId]);
+        $images = [];
+
+        while (($row = $statement->fetch()) !== false) {
+            $images[] = new ProductImage(
+                (int) $row['product_image_id'],
+                (string) $row['url'],
+                trim((string) ($row['alt_text'] ?? '')),
+                (int) $row['sort_order']
+            );
+        }
+
+        return $images;
     }
 
     /** @return list<array{id: int, name: string}> */
@@ -339,6 +421,43 @@ final class ProductRepository implements RepositoryInterface
 
             return $imageUrls;
         });
+    }
+
+    /**
+     * @param list<int> $categoryIds
+     * @return array{0: string, 1: array<string, int|string>}
+     */
+    private function storefrontFilter(array $categoryIds, string $search): array
+    {
+        $conditions = ['p.is_active = 1', 'p.deleted_at IS NULL'];
+        $parameters = [];
+
+        if ($categoryIds !== []) {
+            $placeholders = [];
+
+            foreach (array_values(array_unique($categoryIds)) as $index => $categoryId) {
+                $name = 'category_' . $index;
+                $placeholders[] = ':' . $name;
+                $parameters[$name] = $categoryId;
+            }
+
+            $conditions[] = 'p.category_id IN (' . implode(', ', $placeholders) . ')';
+        }
+
+        if ($search !== '') {
+            $escapedSearch = strtr($search, ['!' => '!!', '%' => '!%', '_' => '!_']);
+            $searchValue = '%' . $escapedSearch . '%';
+            $conditions[] = "(
+                p.name LIKE :search_name ESCAPE '!'
+                OR COALESCE(p.description, '') LIKE :search_description ESCAPE '!'
+                OR p.sku LIKE :search_sku ESCAPE '!'
+            )";
+            $parameters['search_name'] = $searchValue;
+            $parameters['search_description'] = $searchValue;
+            $parameters['search_sku'] = $searchValue;
+        }
+
+        return [' WHERE ' . implode(' AND ', $conditions), $parameters];
     }
 
     /** @param array<string, mixed> $row */

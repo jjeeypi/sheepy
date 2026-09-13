@@ -2,7 +2,7 @@
 
 Sheepy is a mobile-first apparel storefront built as a Web Programming midterm project. The application is designed around a calm editorial shopping experience and a structured PHP backend powered by MariaDB and PDO.
 
-The repository currently contains the database schema, database connection layer, Phase 2 core framework, Phase 3 authentication, and secure administrator product management. Customer storefront browsing, checkout, and order features remain scaffolded for later development stages.
+The repository currently contains the database schema, database connection layer, Phase 2 core framework, Phase 3 authentication, secure administrator product management, and Phase 4 customer catalogue browsing. Cart, checkout, and order features remain scaffolded for later development stages.
 
 ## Project Status
 
@@ -23,7 +23,8 @@ The repository currently contains the database schema, database connection layer
 - [x] Administrator product create, edit, and guarded delete workflows
 - [x] Validated product image upload and automatic alt text
 - [x] Repeatable product-management smoke test
-- [ ] Storefront and product search
+- [x] Storefront categories, product search, images, and product details
+- [x] Repeatable Phase 4 catalogue browsing smoke test
 - [ ] Cart and simulated checkout
 - [ ] Customer orders, profile, and addresses
 - [ ] Automated unit and integration tests
@@ -202,6 +203,26 @@ Run the product-management smoke test with:
 
 ```powershell
 C:\xampp\php\php.exe .\tests\ProductManagementSmokeTest.php
+```
+
+## Phase 4 Catalogue Browsing
+
+Phase 4 turns the authenticated customer Home page into a functional, intentionally unstyled catalogue matching the supplied mockup's browsing structure:
+
+- Men, Women, Kids, and Accessories department navigation
+- Product-type browsing beneath each department
+- New-arrival products on Home and a paginated all-products page
+- Product search across names, descriptions, and SKUs
+- Literal wildcard escaping and prepared category/search queries
+- Product cards with uploaded images, stored alt text, price, category, and availability
+- Product details with ordered image galleries, descriptions, stock, and category breadcrumbs
+- Database-level exclusion of inactive and soft-deleted products from every customer query
+- Friendly empty results and `404` pages without exposing technical errors
+
+Run the Phase 4 database-backed smoke test with:
+
+```powershell
+C:\xampp\php\php.exe .\tests\CatalogBrowsingSmokeTest.php
 ```
 
 ## Development Notes
