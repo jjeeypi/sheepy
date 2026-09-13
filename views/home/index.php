@@ -126,6 +126,24 @@
                 <div><strong>Order receipts</strong><span>Saved to your history</span></div>
             </article>
         </section>
+
+        <!-- Newsletter block -->
+        <section class="newsletter-block section-shell" aria-labelledby="newsletter-title">
+            <p class="eyebrow">Stay in the loop</p>
+            <h2 id="newsletter-title">New pieces, slow stories.</h2>
+            <p>Sign up for occasional notes on new arrivals and quiet things worth knowing about.</p>
+            <form class="newsletter-form" action="<?= $escape($homeUrl) ?>" method="get" aria-label="Newsletter sign-up">
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="your@email.com"
+                    autocomplete="email"
+                    aria-label="Email address"
+                    maxlength="191"
+                >
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
     </main>
 
     <?php require dirname(__DIR__) . '/storefront/_footer.php'; ?>

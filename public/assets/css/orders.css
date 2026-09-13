@@ -1,0 +1,417 @@
+/* ============================================================
+   Orders — list and receipt pages
+   Relies on storefront.css for :root custom properties.
+   ============================================================ */
+
+/* ---------- Shared masthead (mirrors profile-masthead) ---------- */
+
+.orders-main {
+    padding-bottom: var(--section-space);
+}
+
+.orders-page {
+    overflow-x: hidden;
+}
+
+.orders-masthead {
+    border-bottom: 1px solid var(--stone);
+    padding: clamp(3.25rem, 6vw, 5.5rem) 0 clamp(2.25rem, 4vw, 3.5rem);
+}
+
+.orders-eyebrow {
+    color: var(--rust-dark);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    margin: 0 0 0.7rem;
+    text-transform: uppercase;
+}
+
+.orders-masthead h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.7rem, 6vw, 5.2rem);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+    margin: 0;
+}
+
+.orders-masthead > p:last-child {
+    color: var(--ink-soft);
+    line-height: 1.65;
+    margin: 1.25rem 0 0;
+    max-width: 36rem;
+}
+
+/* ---------- Order list ---------- */
+
+.orders-list {
+    display: grid;
+    gap: 0.75rem;
+    padding-top: clamp(2rem, 4vw, 3rem);
+}
+
+.order-card {
+    align-items: center;
+    background: var(--paper);
+    border: 1px solid var(--stone);
+    border-radius: 1.25rem;
+    display: grid;
+    gap: 0.5rem 1.5rem;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    padding: 1.35rem clamp(1.25rem, 3vw, 1.75rem);
+    text-decoration: none;
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.order-card:hover {
+    background: var(--tag);
+    border-color: var(--stone-dark);
+}
+
+.order-card-number {
+    font-family: var(--serif);
+    font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+    font-style: italic;
+    font-weight: 500;
+    grid-column: 1;
+    grid-row: 1;
+    letter-spacing: 0.02em;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.order-card-meta {
+    color: var(--ink-soft);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    gap: 0.35rem 1rem;
+    grid-column: 1;
+    grid-row: 2;
+    margin: 0;
+}
+
+.order-card-total {
+    font-size: 1rem;
+    font-weight: 600;
+    grid-column: 2;
+    grid-row: 1 / 3;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.order-status-badge {
+    align-items: center;
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 0.68rem;
+    font-weight: 600;
+    gap: 0.35rem;
+    padding: 0.2rem 0.65rem;
+}
+
+.order-status-badge::before {
+    background: currentColor;
+    border-radius: 50%;
+    content: '';
+    flex: 0 0 6px;
+    height: 6px;
+    width: 6px;
+}
+
+.order-status-badge.is-confirmed {
+    background: var(--olive-soft);
+    color: var(--olive);
+}
+
+.order-status-badge.is-cancelled {
+    background: #f7ebe8;
+    color: #8c3933;
+}
+
+/* ---------- Empty state ---------- */
+
+.orders-empty {
+    background: var(--tag);
+    border-radius: 1rem;
+    padding: clamp(3rem, 8vw, 6rem) 1.5rem;
+    text-align: center;
+}
+
+.orders-empty h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.orders-empty p {
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0.9rem auto 1.25rem;
+}
+
+.orders-empty a {
+    color: var(--rust);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-underline-offset: 0.25rem;
+}
+
+/* ---------- Receipt / single order ---------- */
+
+.receipt-layout {
+    display: grid;
+    gap: clamp(1.5rem, 3.5vw, 3rem);
+    grid-template-columns: minmax(0, 1.65fr) minmax(18rem, 0.85fr);
+    padding-top: clamp(2rem, 4vw, 3.25rem);
+}
+
+.receipt-back {
+    align-items: center;
+    color: var(--rust-dark);
+    display: inline-flex;
+    font-size: 0.78rem;
+    font-weight: 600;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+}
+
+.receipt-back:hover {
+    color: var(--ink);
+}
+
+/* Items panel */
+.receipt-panel {
+    background: var(--paper);
+    border: 1px solid var(--stone);
+    border-radius: 1.25rem;
+    padding: clamp(1.35rem, 3.5vw, 2rem);
+}
+
+.receipt-panel-heading {
+    font-family: var(--serif);
+    font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    margin: 0 0 1.25rem;
+}
+
+.receipt-items {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.receipt-item {
+    align-items: center;
+    border-bottom: 1px solid var(--stone);
+    display: grid;
+    font-size: 0.82rem;
+    gap: 0.65rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    padding-bottom: 0.65rem;
+}
+
+.receipt-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.receipt-item-name {
+    font-weight: 600;
+    grid-column: 1;
+    grid-row: 1;
+    overflow-wrap: anywhere;
+}
+
+.receipt-item-meta {
+    color: var(--ink-soft);
+    font-size: 0.73rem;
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.receipt-item-total {
+    font-weight: 600;
+    grid-column: 2;
+    grid-row: 1 / 3;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Sidebar */
+.receipt-sidebar {
+    align-content: start;
+    display: grid;
+    gap: 0.85rem;
+}
+
+.receipt-summary-card,
+.receipt-address-card {
+    background: var(--paper);
+    border: 1px solid var(--stone);
+    border-radius: 1.25rem;
+    padding: 1.35rem;
+}
+
+.receipt-summary-card h3,
+.receipt-address-card h3 {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: 500;
+    margin: 0 0 1rem;
+}
+
+.receipt-totals {
+    display: grid;
+    gap: 0;
+}
+
+.receipt-total-row {
+    align-items: baseline;
+    border-top: 1px solid var(--stone);
+    display: flex;
+    font-size: 0.83rem;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+}
+
+.receipt-total-row:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.receipt-grand-total {
+    border-top: 1px solid var(--stone-dark);
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-style: italic;
+    font-weight: 500;
+    margin-top: 0.45rem;
+    padding-top: 0.8rem !important;
+}
+
+.receipt-address-card address {
+    color: var(--ink-soft);
+    font-size: 0.83rem;
+    font-style: normal;
+    line-height: 1.75;
+}
+
+.receipt-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 0.5rem;
+}
+
+.btn-orders-primary {
+    align-items: center;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    color: var(--paper);
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 600;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.7rem 1.25rem;
+    text-decoration: none;
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.btn-orders-primary:hover {
+    background: var(--rust-dark);
+    border-color: var(--rust-dark);
+}
+
+.btn-orders-secondary {
+    align-items: center;
+    background: transparent;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    color: var(--ink);
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 600;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.7rem 1.25rem;
+    text-decoration: none;
+    transition: background-color 160ms ease;
+}
+
+.btn-orders-secondary:hover {
+    background: var(--tag);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 56rem) {
+    .receipt-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .receipt-sidebar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .receipt-summary-card {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 40rem) {
+    .orders-masthead h1 {
+        font-size: clamp(2.6rem, 10vw, 3.5rem);
+    }
+
+    .orders-list {
+        padding-top: 1.5rem;
+    }
+
+    .order-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .order-card-number {
+        grid-row: 1;
+    }
+
+    .order-card-meta {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .order-card-total {
+        grid-column: 1;
+        grid-row: 3;
+        text-align: left;
+    }
+
+    .receipt-layout,
+    .receipt-sidebar {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .order-card,
+    .btn-orders-primary,
+    .btn-orders-secondary {
+        transition: none;
+    }
+}

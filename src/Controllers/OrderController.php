@@ -11,6 +11,8 @@ use App\Core\View;
 use App\Exceptions\NotFoundException;
 use App\Models\User;
 use App\Services\AuthService;
+use App\Services\CartService;
+use App\Services\CatalogService;
 use App\Services\CheckoutService;
 
 final class OrderController extends BaseController
@@ -19,7 +21,9 @@ final class OrderController extends BaseController
         View $view,
         private readonly CheckoutService $checkout,
         private readonly AuthService $auth,
-        private readonly Csrf $csrf
+        private readonly Csrf $csrf,
+        private readonly CatalogService $catalog,
+        private readonly CartService $cart
     ) {
         parent::__construct($view);
     }
@@ -62,12 +66,21 @@ final class OrderController extends BaseController
     private function viewData(Request $request, User $user): array
     {
         return [
-            'user' => $user,
-            'csrfToken' => $this->csrf->token(),
-            'logoutUrl' => $request->url('/logout'),
-            'homeUrl' => $request->url('/home'),
-            'productsUrl' => $request->url('/products'),
-            'ordersUrl' => $request->url('/orders'),
+            'user'               => $user,
+            'navigation'         => $this->catalog->navigation(),
+            'csrfToken'          => $this->csrf->token(),
+            'logoutUrl'          => $request->url('/logout'),
+            'homeUrl'            => $request->url('/home'),
+            'productsUrl'        => $request->url('/products'),
+            'categoriesUrl'      => $request->url('/categories'),
+            'profileUrl'         => $request->url('/profile'),
+            'ordersUrl'          => $request->url('/orders'),
+            'basePath'           => $request->basePath(),
+            'cartUrl'            => $request->url('/cart'),
+            'cartItemsUrl'       => $request->url('/cart/items'),
+            'checkoutUrl'        => $request->url('/checkout'),
+            'checkoutConfirmUrl' => $request->url('/checkout/confirm'),
+            'cartItemCount'      => $this->cart->itemCount($user->id),
         ];
     }
 }

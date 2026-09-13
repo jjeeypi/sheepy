@@ -715,6 +715,100 @@ body.storefront-page .cart-count {
     line-height: 1.35;
 }
 
+/* ---- Newsletter block ---- */
+
+.newsletter-block {
+    border: 1px solid var(--stone);
+    border-radius: 1.25rem;
+    margin-top: var(--section-space);
+    margin-bottom: var(--section-space);
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 5vw, 4rem);
+    text-align: center;
+}
+
+.newsletter-block p.eyebrow {
+    color: var(--rust);
+    margin-bottom: 0.75rem;
+}
+
+.newsletter-block h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+    margin: 0 0 0.6rem;
+}
+
+.newsletter-block > p:not(.eyebrow) {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin: 0 auto 1.5rem;
+    max-width: 28rem;
+}
+
+.newsletter-form {
+    align-items: center;
+    background: var(--paper);
+    border: 1.3px solid var(--stone-dark);
+    border-radius: 999px;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 1fr auto;
+    margin: 0 auto;
+    max-width: 30rem;
+    padding: 0.3rem 0.3rem 0.3rem 1.25rem;
+}
+
+.newsletter-form input {
+    background: transparent;
+    border: 0;
+    color: var(--ink);
+    font: inherit;
+    min-height: 2.6rem;
+    min-width: 0;
+    outline: 0;
+}
+
+.newsletter-form input::placeholder {
+    color: var(--ink-soft);
+}
+
+.newsletter-form button {
+    background: var(--ink);
+    border: 0;
+    border-radius: 999px;
+    color: var(--paper);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-height: 2.6rem;
+    padding: 0.65rem 1.25rem;
+    transition: background-color 160ms ease;
+    white-space: nowrap;
+}
+
+.newsletter-form button:hover {
+    background: var(--rust-dark);
+}
+
+@media (max-width: 40rem) {
+    .newsletter-form {
+        border-radius: 0.85rem;
+        grid-template-columns: 1fr;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .newsletter-form button {
+        border-radius: 999px;
+        width: 100%;
+    }
+}
+
+/* ---- End newsletter block ---- */
+
 .site-footer {
     background: var(--paper);
     border-top: 1px solid var(--stone);
