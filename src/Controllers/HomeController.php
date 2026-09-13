@@ -37,6 +37,7 @@ final class HomeController extends BaseController
             'homeUrl' => $request->url('/home'),
             'productsUrl' => $request->url('/products'),
             'categoriesUrl' => $request->url('/categories'),
+            'profileUrl' => $request->url('/profile'),
             'basePath' => $request->basePath(),
             'navigation' => $navigation,
             'featuredCategories' => $this->featuredCategories($navigation),

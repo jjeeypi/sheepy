@@ -70,6 +70,7 @@ $html = $view->render('home/index', [
     'homeUrl' => '/sheepy/public/home',
     'productsUrl' => '/sheepy/public/products',
     'categoriesUrl' => '/sheepy/public/categories',
+    'profileUrl' => '/sheepy/public/profile',
     'basePath' => '/sheepy/public',
     'navigation' => $navigation,
     'featuredCategories' => $featuredCategories,

@@ -908,7 +908,7 @@ body.storefront-page .cart-secondary-button {
     .mobile-account-links {
         display: grid;
         gap: 0;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         padding-top: 0.5rem;
     }
 
@@ -926,7 +926,7 @@ body.storefront-page .cart-secondary-button {
         width: 100%;
     }
 
-    .mobile-account-links form {
+    .mobile-account-links > :not(:first-child) {
         border-left: 1px solid var(--stone);
         padding-left: 1rem;
     }

@@ -19,6 +19,7 @@
         </nav>
         <nav aria-label="Footer account links">
             <strong>Account</strong>
+            <a href="<?= $escape($profileUrl) ?>">Profile</a>
             <a href="<?= $escape($ordersUrl) ?>">Order history</a>
             <form method="post" action="<?= $escape($logoutUrl) ?>">
                 <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
@@ -49,8 +50,13 @@
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 6H6"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>
         <span>Bag</span>
     </button>
-    <button type="button" data-bottom-account>
+    <a
+        class="<?= $activeNavigation === 'profile' ? 'is-active' : '' ?>"
+        href="<?= $escape($profileUrl) ?>"
+        <?= $activeNavigation === 'profile' ? 'aria-current="page"' : '' ?>
+        data-bottom-account
+    >
         <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c.6-4 3-6 7-6s6.4 2 7 6"></path></svg>
-        <span>Account</span>
-    </button>
+        <span>Profile</span>
+    </a>
 </nav>

@@ -9,6 +9,7 @@ use App\Controllers\CartController;
 use App\Controllers\CheckoutController;
 use App\Controllers\HomeController;
 use App\Controllers\OrderController;
+use App\Controllers\ProfileController;
 use App\Controllers\ProductController;
 use App\Core\Request;
 use App\Core\Response;
@@ -40,6 +41,7 @@ return static function (Router $router): void {
 
     $router->post('/logout', [AuthController::class, 'logout'], [AuthMiddleware::class]);
     $router->get('/home', [HomeController::class, 'index'], [AuthMiddleware::class]);
+    $router->get('/profile', [ProfileController::class, 'show'], [AuthMiddleware::class]);
     $router->get('/products', [ProductController::class, 'index'], [AuthMiddleware::class]);
     $router->get(
         '/products/{slug:[a-z0-9-]+}',

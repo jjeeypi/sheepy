@@ -54,6 +54,7 @@ final class ProductController extends BaseController
             'homeUrl' => $request->url('/home'),
             'productsUrl' => $request->url('/products'),
             'categoriesUrl' => $request->url('/categories'),
+            'profileUrl' => $request->url('/profile'),
             'basePath' => $request->basePath(),
             'cartUrl' => $request->url('/cart'),
             'cartItemsUrl' => $request->url('/cart/items'),
@@ -123,6 +124,7 @@ final class ProductController extends BaseController
             'homeUrl' => $request->url('/home'),
             'productsUrl' => $request->url('/products'),
             'categoriesUrl' => $request->url('/categories'),
+            'profileUrl' => $request->url('/profile'),
             'browseUrl' => $request->url($browsePath),
             'previousPageUrl' => $result['page'] > 1
                 ? $pageUrl($result['page'] - 1)

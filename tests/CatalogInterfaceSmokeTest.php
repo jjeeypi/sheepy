@@ -90,6 +90,7 @@ $html = (new View($root . '/views'))->render('products/index', [
     'homeUrl' => '/sheepy/public/home',
     'productsUrl' => '/sheepy/public/products',
     'categoriesUrl' => '/sheepy/public/categories',
+    'profileUrl' => '/sheepy/public/profile',
     'browseUrl' => '/sheepy/public/categories/men',
     'previousPageUrl' => null,
     'nextPageUrl' => null,

@@ -135,7 +135,7 @@
             const headingGroup = createElement('div', 'cart-modal-heading');
 
             if (backHandler !== null) {
-                const back = createElement('button', 'cart-back-button', '← Back to cart');
+                const back = createElement('button', 'cart-back-button', '\u2190 Back to cart');
                 back.type = 'button';
                 back.addEventListener('click', backHandler);
                 headingGroup.append(back);
@@ -145,7 +145,7 @@
             heading.id = 'cart-modal-title';
             headingGroup.append(heading);
 
-            const close = createElement('button', 'cart-close-button', '×');
+            const close = createElement('button', 'cart-close-button', '\u00D7');
             close.type = 'button';
             close.setAttribute('aria-label', 'Close cart');
             close.addEventListener('click', closeDialog);

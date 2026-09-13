@@ -32,7 +32,8 @@ The repository contains the database layer, Phase 2 core framework, Phase 3 auth
 - [x] Transactional simulated checkout with stock revalidation
 - [x] Customer order history and immutable receipt snapshots
 - [x] Repeatable Phase 6 checkout smoke test
-- [ ] Customer profile and saved addresses
+- [x] Responsive customer profile and account navigation
+- [ ] Saved addresses and secure profile editing
 
 ## Planned Storefront Experience
 
@@ -258,6 +259,23 @@ Run the Phase 5 database-backed smoke test with:
 
 ```powershell
 C:\xampp\php\php.exe .\tests\CartSystemSmokeTest.php
+```
+
+## Customer Profile
+
+The authenticated customer profile extends the shared storefront experience without exposing private account data:
+
+- Responsive account details for username, email address, and optional phone number
+- Shared product search, live cart access, department navigation, and mobile shortcut bar
+- Direct links to order history and the complete product collection
+- CSRF-protected sign-out controls in the profile page, header, mobile menu, and footer
+- Password hashes, session values, roles, and environment details never appear in the interface
+- Profile editing and saved addresses remain clearly separated until their validated backend workflows are implemented
+
+Run the profile interface smoke test with:
+
+```powershell
+C:\xampp\php\php.exe .\tests\ProfileInterfaceSmokeTest.php
 ```
 
 ## Phase 6 Checkout and Orders

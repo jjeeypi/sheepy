@@ -1,4 +1,7 @@
-<?php $activeNavigation = $activeNavigation ?? ''; ?>
+<?php
+$activeNavigation = $activeNavigation ?? '';
+$searchQuery = isset($query) && is_string($query) ? $query : '';
+?>
 <header class="site-header" data-site-header>
     <div class="header-shell">
         <button
@@ -33,6 +36,7 @@
                 ><?= $escape($group['department']->name) ?></a>
             <?php endforeach; ?>
             <div class="mobile-account-links" data-mobile-account-links>
+                <a href="<?= $escape($profileUrl) ?>">Profile</a>
                 <a href="<?= $escape($ordersUrl) ?>">Order history</a>
                 <form method="post" action="<?= $escape($logoutUrl) ?>">
                     <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
@@ -71,6 +75,7 @@
                         <p class="account-label">Signed in as</p>
                         <strong><?= $escape($user->username) ?></strong>
                     <?php endif; ?>
+                    <a href="<?= $escape($profileUrl) ?>">Profile</a>
                     <a href="<?= $escape($ordersUrl) ?>">Order history</a>
                     <form method="post" action="<?= $escape($logoutUrl) ?>">
                         <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
@@ -95,6 +100,7 @@
                 maxlength="100"
                 autocomplete="off"
                 placeholder="Search products"
+                value="<?= $escape($searchQuery) ?>"
             >
             <button type="submit">Search</button>
         </form>
