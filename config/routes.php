@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\AdminController;
+use App\Controllers\AdminProductController;
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Core\Request;
@@ -36,4 +37,13 @@ return static function (Router $router): void {
     $router->post('/logout', [AuthController::class, 'logout'], [AuthMiddleware::class]);
     $router->get('/home', [HomeController::class, 'index'], [AuthMiddleware::class]);
     $router->get('/admin', [AdminController::class, 'dashboard'], [AdminMiddleware::class]);
+
+    $router->group('/admin/products', static function (Router $router): void {
+        $router->get('', [AdminProductController::class, 'index']);
+        $router->get('/create', [AdminProductController::class, 'create']);
+        $router->post('', [AdminProductController::class, 'store']);
+        $router->get('/{id:\d+}/edit', [AdminProductController::class, 'edit']);
+        $router->post('/{id:\d+}', [AdminProductController::class, 'update']);
+        $router->post('/{id:\d+}/delete', [AdminProductController::class, 'destroy']);
+    }, [AdminMiddleware::class]);
 };

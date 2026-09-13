@@ -12,7 +12,9 @@ use App\Core\Session;
 use App\Core\View;
 use App\Core\Csrf;
 use App\Repositories\UserRepository;
+use App\Repositories\ProductRepository;
 use App\Services\AuthService;
+use App\Services\ProductService;
 
 $root = dirname(__DIR__);
 
@@ -53,6 +55,8 @@ try {
     );
     $container->singleton(UserRepository::class);
     $container->singleton(AuthService::class);
+    $container->singleton(ProductRepository::class);
+    $container->singleton(ProductService::class);
 
     $router = new Router($container);
     $registerRoutes = require $root . '/config/routes.php';

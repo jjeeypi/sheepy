@@ -21,6 +21,7 @@ storage/cache/*
 # Uploaded files (don't commit user-uploaded product images)
 public/uploads/products/*
 !public/uploads/products/.gitkeep
+!public/uploads/products/.htaccess
 
 # OS-generated files
 .DS_Store

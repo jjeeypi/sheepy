@@ -26,6 +26,8 @@ final class AdminController extends BaseController
             'user' => $this->auth->currentUser(),
             'csrfToken' => $this->csrf->token(),
             'logoutUrl' => $request->url('/logout'),
+            'addProductUrl' => $request->url('/admin/products/create'),
+            'manageProductsUrl' => $request->url('/admin/products'),
         ]);
     }
 }

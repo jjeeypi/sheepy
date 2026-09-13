@@ -2,7 +2,7 @@
 
 Sheepy is a mobile-first apparel storefront built as a Web Programming midterm project. The application is designed around a calm editorial shopping experience and a structured PHP backend powered by MariaDB and PDO.
 
-The repository currently contains the database schema, database connection layer, Phase 2 core framework, and Phase 3 authentication. Storefront, checkout, order, and catalogue administration features remain scaffolded for later development stages.
+The repository currently contains the database schema, database connection layer, Phase 2 core framework, Phase 3 authentication, and secure administrator product management. Customer storefront browsing, checkout, and order features remain scaffolded for later development stages.
 
 ## Project Status
 
@@ -20,10 +20,12 @@ The repository currently contains the database schema, database connection layer
 - [x] Secure sessions, password hashing, and CSRF protection
 - [x] Customer/admin access middleware and role-based redirects
 - [x] Repeatable Phase 3 authentication smoke test
+- [x] Administrator product create, edit, and guarded delete workflows
+- [x] Validated product image upload and automatic alt text
+- [x] Repeatable product-management smoke test
 - [ ] Storefront and product search
 - [ ] Cart and simulated checkout
 - [ ] Customer orders, profile, and addresses
-- [ ] Administrator product CRUD
 - [ ] Automated unit and integration tests
 
 ## Planned Storefront Experience
@@ -38,7 +40,7 @@ The interface mockup defines the following customer experience:
 - Customer profile, orders, saved addresses, and sign-out
 - Responsive, mobile-first presentation using Sheepy's cream, stone, rust, olive, and ink design palette
 
-The planned administrator area will provide secure product and catalogue management.
+The administrator area provides secure product creation and management. Its visual design intentionally remains plain until the final UI/UX stage.
 
 ## Technology
 
@@ -69,6 +71,8 @@ Use `.env.example` only as a guide, then enter the correct local values in `.env
 Using phpMyAdmin or another database administration tool, create the local database configured in `.env`, then import `database/schema.sql`.
 
 If the tables already exist, do not import the schema again. Individual migration files are available under `database/migrations/` for incremental setup.
+
+The repeatable catalogue seed under `database/seeds/` creates the Men, Women, Kids, and Accessories departments with their product-type subcategories. Import it after the schema when setting up a fresh database.
 
 ### 4. Open the application
 
@@ -180,6 +184,25 @@ C:\xampp\php\php.exe .\tests\AuthenticationSmokeTest.php
 ```
 
 Administrator credentials are local-only and are intentionally omitted from this document. Never paste account credentials into source files, documentation, screenshots, issues, or commits.
+
+## Administrator Product Management
+
+The administrator Dashboard provides separate Add Product and Manage Products actions. The current plain HTML workflow includes:
+
+- Product name, SKU, description, price, stock, visibility, and optional category fields
+- Required image upload during creation and optional image replacement during editing
+- Server-verified JPG, PNG, WebP, and GIF uploads limited to 5 MB
+- Randomized image filenames stored under the public product-upload directory
+- Image alt text that automatically follows the product name
+- Prepared product queries, database transactions, unique SKUs, and generated URL slugs
+- Physical image cleanup after replacement or deletion
+- Disabled delete controls and a transactional server-side deletion block for ordered products
+
+Run the product-management smoke test with:
+
+```powershell
+C:\xampp\php\php.exe .\tests\ProductManagementSmokeTest.php
+```
 
 ## Development Notes
 

@@ -11,6 +11,12 @@
         <?php if ($user instanceof \App\Models\User): ?>
             <p>Welcome, <?= $escape($user->username) ?>.</p>
         <?php endif; ?>
+        <form method="get" action="<?= $escape($addProductUrl) ?>">
+            <button type="submit">Add Product</button>
+        </form>
+        <form method="get" action="<?= $escape($manageProductsUrl) ?>">
+            <button type="submit">Manage Products</button>
+        </form>
         <form method="post" action="<?= $escape($logoutUrl) ?>">
             <input type="hidden" name="_token" value="<?= $escape($csrfToken) ?>">
             <button type="submit">Log out</button>
