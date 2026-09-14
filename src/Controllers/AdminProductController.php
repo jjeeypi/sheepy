@@ -12,6 +12,7 @@ use App\Exceptions\NotFoundException;
 use App\Exceptions\ProductInUseException;
 use App\Exceptions\ValidationException;
 use App\Models\Product;
+use App\Services\AuthService;
 use App\Services\ProductService;
 use App\Validators\ProductValidator;
 
@@ -21,7 +22,8 @@ final class AdminProductController extends BaseController
         View $view,
         private readonly ProductService $products,
         private readonly ProductValidator $validator,
-        private readonly Csrf $csrf
+        private readonly Csrf $csrf,
+        private readonly AuthService $auth
     ) {
         parent::__construct($view);
     }
@@ -83,7 +85,11 @@ final class AdminProductController extends BaseController
             'basePath' => $request->basePath(),
             'dashboardUrl' => $request->url('/admin'),
             'addProductUrl' => $request->url('/admin/products/create'),
+            'manageProductsUrl' => $request->url('/admin/products'),
             'productsUrl' => $request->url('/admin/products'),
+            'user' => $this->auth->currentUser(),
+            'logoutUrl' => $request->url('/logout'),
+            'activeNav' => 'products',
         ]);
     }
 
@@ -170,6 +176,11 @@ final class AdminProductController extends BaseController
                 ? $request->url('/admin/products/' . $product->id)
                 : $request->url('/admin/products'),
             'manageProductsUrl' => $request->url('/admin/products'),
+            'dashboardUrl' => $request->url('/admin'),
+            'user' => $this->auth->currentUser(),
+            'logoutUrl' => $request->url('/logout'),
+            'activeNav' => 'products',
+            'basePath' => $request->basePath(),
             'currentImageUrl' => $editing && $product->imageUrl !== null
                 ? $request->url($product->imageUrl)
                 : null,
