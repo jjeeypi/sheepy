@@ -10,6 +10,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500;1,9..144,600&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= $escape($authCssUrl ?? '/assets/css/auth.css') ?>">
     <script src="<?= $escape($authJsUrl ?? '/assets/js/auth.js') ?>" defer></script>
+    <!-- Tailwind CSS v4 -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-bone: #f6f3ec;
+            --color-ink: #2a2621;
+            --color-ink-soft: #7a7266;
+            --color-rust: #a9663d;
+            --color-rust-dark: #8f5330;
+            --color-stone: #e4dccc;
+            --color-tag: #efe9dc;
+            --font-serif: 'Fraunces', Georgia, serif;
+            --font-sans: 'Inter', Arial, sans-serif;
+        }
+    </style>
 </head>
 <body class="auth-page auth-page-login">
     <a class="auth-skip-link" href="#auth-main">Skip to sign in</a>

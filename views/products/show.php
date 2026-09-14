@@ -14,6 +14,24 @@
     <link rel="stylesheet" href="<?= $escape($basePath) ?>/assets/css/product-detail.css">
     <script src="<?= $escape($basePath) ?>/assets/js/storefront.js" defer></script>
     <script src="<?= $escape($basePath) ?>/assets/js/cart.js" defer></script>
+    <!-- Tailwind CSS v4 -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-bone: #f6f3ec;
+            --color-paper: #fcfaf6;
+            --color-ink: #2a2621;
+            --color-ink-soft: #7a7266;
+            --color-rust: #a9663d;
+            --color-rust-dark: #8f5330;
+            --color-stone: #e4dccc;
+            --color-stone-dark: #cfc4ac;
+            --color-olive: #6e7350;
+            --color-tag: #efe9dc;
+            --font-serif: 'Fraunces', Georgia, serif;
+            --font-sans: 'Inter', Arial, sans-serif;
+        }
+    </style>
 </head>
 <body class="storefront-page product-detail-page">
     <a class="skip-link" href="#main-content">Skip to main content</a>

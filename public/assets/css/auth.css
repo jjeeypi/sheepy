@@ -620,33 +620,68 @@ html {
 }
 
 @media (max-width: 640px) {
+    /* Full bleed, scrollable form page */
     .auth-main {
         align-items: flex-start;
-        padding: 28px 22px 42px;
+        background:
+            radial-gradient(ellipse at 100% 0%, rgba(228, 220, 204, 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 0% 100%, rgba(169, 102, 61, 0.07) 0%, transparent 50%),
+            var(--auth-bone);
+        padding: 2.5rem 1.5rem calc(4rem + env(safe-area-inset-bottom));
     }
 
+    /* Full-width card */
     .auth-card,
     .auth-card-register {
         width: 100%;
+        max-width: 100%;
     }
 
+    /* Logo: centered, breathing room below */
     .auth-mobile-brand {
-        margin-bottom: 44px;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
     }
 
     .auth-brand {
-        width: 126px;
+        width: 5.5rem;
     }
 
+    /* Divider line between brand and form */
+    .auth-mobile-brand::after {
+        display: none;
+    }
+
+    /* Card header: centered on mobile */
     .auth-card-header {
-        margin-bottom: 29px;
+        margin-bottom: 1.75rem;
+        text-align: center;
+    }
+
+    .auth-card-header .auth-eyebrow {
+        letter-spacing: 0.08em;
     }
 
     .auth-card-header h1 {
-        font-size: clamp(36px, 10vw, 44px);
+        font-size: clamp(2.1rem, 8.5vw, 2.75rem);
+        letter-spacing: -0.04em;
+        line-height: 1.06;
     }
 
+    .auth-card-header > p:last-child {
+        font-size: 0.88rem;
+        margin-top: 0.55rem;
+    }
+
+    /* Form: slightly tighter gap on phone */
+    .auth-form {
+        gap: 0.9rem;
+    }
+
+    /* Register: single column on phone */
     .auth-register-form {
+        gap: 0.9rem;
         grid-template-columns: minmax(0, 1fr);
     }
 
@@ -654,27 +689,82 @@ html {
         grid-column: auto;
     }
 
+    /* CRITICAL: 16px prevents iOS from zooming on input focus */
+    .auth-field input {
+        font-size: 16px;
+        height: 3.25rem;   /* 52px — comfortable touch target */
+    }
+
+    /* Label: slightly smaller */
+    .auth-field label {
+        font-size: 11px;
+        letter-spacing: 0.07em;
+    }
+
+    /* Password meter text */
+    .auth-password-help p {
+        font-size: 11.5px;
+    }
+
+    /* Submit button: full width, tall */
+    .auth-submit {
+        font-size: 15px;
+        letter-spacing: 0.02em;
+        min-height: 3.35rem;  /* 54px */
+        margin-top: 0.35rem;
+    }
+
+    /* Privacy note */
+    .auth-privacy {
+        font-size: 11px;
+        line-height: 1.55;
+    }
+
+    /* Switch link: stacked, centered */
     .auth-switch {
-        flex-wrap: wrap;
+        align-items: center;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 0.25rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
+        text-align: center;
+    }
+
+    .auth-switch p {
+        font-size: 0.82rem;
+    }
+
+    .auth-switch a {
+        font-size: 0.88rem;
+    }
+
+    /* Alert box: full width */
+    .auth-alert {
+        font-size: 0.82rem;
+        margin-bottom: 0.5rem;
+        padding: 0.85rem 1rem;
     }
 }
 
 @media (max-width: 380px) {
     .auth-main {
-        padding-right: 17px;
-        padding-left: 17px;
+        padding-inline: 1.15rem;
     }
 
+    /* Keep 16px — never go below on mobile (iOS zoom threshold) */
     .auth-field input {
-        padding-left: 44px;
-        font-size: 13px;
+        font-size: 16px;
+        padding-left: 2.75rem;
     }
 
     .auth-input-icon {
-        left: 15px;
-        width: 18px;
+        left: 0.9rem;
+        width: 1.05rem;
     }
 }
+
 
 @media (min-width: 981px) and (max-height: 790px) {
     .auth-main {
